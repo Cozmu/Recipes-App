@@ -1,12 +1,12 @@
 import React from 'react';
 import Header from '../components/Header';
 
-function Recipes() {
+function Profile() {
   return (
-    <main>
+    <div>
       <Header />
-    </main>
+    </div>
   );
 }
 
-export default Recipes;
+export default Profile;
