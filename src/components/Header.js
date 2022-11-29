@@ -1,10 +1,12 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import { useContext } from 'react';
 import { useHistory, NavLink } from 'react-router-dom';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
+import RecipesAppContext from '../context/RecipesAppContext';
 
 function Header() {
+  const { btnSearch, setBtnSearch } = useContext(RecipesAppContext);
   const history = useHistory();
   const { location: { pathname } } = history;
 
@@ -26,11 +28,18 @@ function Header() {
 
   const searchIconToggle = () => {
     const link = (
-      <NavLink
-        to="/"
-        data-testid="search-top-btn"
-        src={ searchIcon }
-      />
+      <button
+        type="button"
+        onClick={ () => {
+          setBtnSearch(!btnSearch);
+        } }
+      >
+        <img
+          data-testid="search-top-btn"
+          src={ searchIcon }
+          alt="searchIcon"
+        />
+      </button>
     );
     switch (pathname) {
     case '/meals':
@@ -49,11 +58,13 @@ function Header() {
         {titles()}
       </h1>
       <NavLink
-        to="/"
+        to="/profile"
         activeClassName="active"
         data-testid="profile-top-btn"
         src={ profileIcon }
-      />
+      >
+        <img src={ profileIcon } alt="profileIcon" />
+      </NavLink>
       {searchIconToggle()}
     </header>
   );
