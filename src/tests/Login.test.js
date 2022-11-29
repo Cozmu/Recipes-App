@@ -7,6 +7,10 @@ describe('Testes da tela de login', () => {
   test('Testa se ha dois inputs, e se o botao esta desativado', () => {
     renderWithRouterAndRedux(<App />);
 
+    jest.spyOn(Object.getPrototypeOf(window.localStorage), 'setItem');
+    Object.setPrototypeOf(window.localStorage.setItem, jest.fn());
+    // https://amitd.co/code/testing/spying-on-localstorage-in-jest
+
     const emailInput = screen.getByTestId('email-input');
     expect(emailInput).toBeInTheDocument();
 
@@ -21,5 +25,8 @@ describe('Testes da tela de login', () => {
 
     userEvent.type(passwordInput, '1234567');
     expect(btnLogin).toBeEnabled();
+
+    userEvent.click(btnLogin);
+    expect(window.localStorage.setItem).toHaveBeenCalled();
   });
 });
