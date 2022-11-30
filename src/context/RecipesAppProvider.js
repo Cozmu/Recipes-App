@@ -15,7 +15,11 @@ function RecipesAppProvider({ children }) {
     searchRequired,
     setMealsArr,
     setDrinksArr,
+    mealsArr,
+    drinksArr,
   }), [
+    mealsArr,
+    drinksArr,
     btnSearch,
     setSearchRequired,
     setBtnSearch,

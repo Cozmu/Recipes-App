@@ -5,15 +5,30 @@ import RequestMealsAPI from '../services/RequestMealsAPI';
 import RequestDrinksAPI from '../services/RequestDrinksAPI';
 
 function SearchBar() {
-  const [isDisabled, setIsDisabled] = useState(true);
   const history = useHistory();
+  const [isDisabled, setIsDisabled] = useState(true);
   const { location: { pathname } } = history;
   const {
     btnSearch,
     searchRequired,
     setSearchRequired,
     setMealsArr,
-    setDrinksArr } = useContext(RecipesAppContext);
+    setDrinksArr,
+    mealsArr,
+    drinksArr,
+  } = useContext(RecipesAppContext);
+
+  useEffect(() => {
+    if (mealsArr.length === 1) {
+      history.push(`/meals/${+mealsArr[0].idMeal}`);
+    }
+  }, [mealsArr]);
+
+  useEffect(() => {
+    if (drinksArr.length === 1) {
+      history.push(`/drinks/${+drinksArr[0].idDrink}`);
+    }
+  }, [drinksArr]);
 
   const sendDrinks = () => {
     if (searchRequired.category === 'Ingredient') {
