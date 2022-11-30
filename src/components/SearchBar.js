@@ -25,12 +25,9 @@ function SearchBar() {
       RequestDrinksAPI(url2).then((drinks) => setDrinksArr(drinks));
     }
     if (searchRequired.category === 'First Letter') {
-      console.log('entrou');
       if (searchRequired.searchText.length > 1) {
-        console.log('maior q 1');
         global.alert('Your search must have only 1 (one) character');
       } else {
-        console.log('fetch');
         const url3 = `https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${searchRequired.searchText}`;
         RequestDrinksAPI(url3).then((drinks) => setDrinksArr(drinks));
       }
