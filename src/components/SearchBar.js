@@ -1,30 +1,54 @@
 import { useEffect, useState, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import RecipesAppContext from '../context/RecipesAppContext';
-import requestAPIFetch from '../services/RequestAPIFetch';
+import RequestMealsAPI from '../services/RequestMealsAPI';
+import RequestDrinksAPI from '../services/RequestDrinksAPI';
 
 function SearchBar() {
   const [isDisabled, setIsDisabled] = useState(true);
+  const history = useHistory();
+  const { location: { pathname } } = history;
   const {
     btnSearch,
     searchRequired,
     setSearchRequired,
-    setMelsArr } = useContext(RecipesAppContext);
+    setMealsArr,
+    setDrinksArr } = useContext(RecipesAppContext);
 
-  const handleSubmite = async () => {
+  const sendDrinks = () => {
+    if (searchRequired.category === 'Ingredient') {
+      const url1 = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${searchRequired.searchText}`;
+      RequestDrinksAPI(url1).then((drinks) => setDrinksArr(drinks));
+    }
+    if (searchRequired.category === 'Name') {
+      const url2 = `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${searchRequired.searchText}`;
+      RequestDrinksAPI(url2).then((drinks) => setDrinksArr(drinks));
+    }
+    if (searchRequired.category === 'First Letter') {
+      if (searchRequired.searchText.length > 1) {
+        global.alert('Your search must have only 1 (one) character');
+      } else {
+        const url3 = `https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${searchRequired.searchText}`;
+        RequestDrinksAPI(url3).then((drinks) => setDrinksArr(drinks));
+      }
+    }
+  };
+
+  const sendMeal = () => {
     if (searchRequired.category === 'Ingredient') {
       const url1 = `https://www.themealdb.com/api/json/v1/1/filter.php?i=${searchRequired.searchText}`;
-      requestAPIFetch(url1).then((meals) => setMelsArr(meals));
+      RequestMealsAPI(url1).then((meals) => setMealsArr(meals));
     }
     if (searchRequired.category === 'Name') {
       const url2 = `https://www.themealdb.com/api/json/v1/1/search.php?s=${searchRequired.searchText}`;
-      requestAPIFetch(url2).then((meals) => setMelsArr(meals));
+      RequestMealsAPI(url2).then((meals) => setMealsArr(meals));
     }
     if (searchRequired.category === 'First Letter') {
       if (searchRequired.searchText.length > 1) {
         global.alert('Your search must have only 1 (one) character');
       } else {
         const url3 = `https://www.themealdb.com/api/json/v1/1/search.php?f=${searchRequired.searchText}`;
-        requestAPIFetch(url3).then((meals) => setMelsArr(meals));
+        RequestMealsAPI(url3).then((meals) => setMealsArr(meals));
       }
     }
   };
@@ -93,7 +117,7 @@ function SearchBar() {
             data-testid="exec-search-btn"
             type="button"
             disabled={ isDisabled }
-            onClick={ () => handleSubmite() }
+            onClick={ pathname === '/meals' ? sendMeal : sendDrinks }
           >
             SEARCH
           </button>

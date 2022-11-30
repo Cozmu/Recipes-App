@@ -1,11 +1,12 @@
-const requestAPIFetch = async (url) => {
+const RequestDrinksAPI = async (url) => {
   try {
     const response = await fetch(url);
     const data = await response.json();
-    const { meals } = data;
-    return meals;
+    const { drinks } = data;
+    return drinks;
   } catch (e) {
     throw new Error(e.message);
   }
 };
-export default requestAPIFetch;
+
+export default RequestDrinksAPI;
