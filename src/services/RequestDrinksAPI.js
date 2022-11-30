@@ -1,11 +1,14 @@
 const RequestDrinksAPI = async (url) => {
   try {
     const response = await fetch(url);
-    const data = await response.json();
-    const { drinks } = data;
-    return drinks;
+    if (response.drinks) {
+      const data = await response.json();
+      const { drinks } = data;
+      return drinks;
+    }
+    return null;
   } catch (e) {
-    throw new Error(e.message);
+    global.alert('Sorry, we haven\'t found any recipes for these filters.');
   }
 };
 

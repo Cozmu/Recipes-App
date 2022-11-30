@@ -5,6 +5,7 @@ import RequestMealsAPI from '../services/RequestMealsAPI';
 import RequestDrinksAPI from '../services/RequestDrinksAPI';
 
 function SearchBar() {
+  const [category, setCategory] = useState('Ingredient');
   const history = useHistory();
   const [isDisabled, setIsDisabled] = useState(true);
   const { location: { pathname } } = history;
@@ -19,53 +20,51 @@ function SearchBar() {
   } = useContext(RecipesAppContext);
 
   useEffect(() => {
-    if (mealsArr.length === 1) {
+    if (mealsArr?.length === 1) {
       history.push(`/meals/${+mealsArr[0].idMeal}`);
     }
-  }, [mealsArr]);
+  }, [mealsArr, history]);
 
   useEffect(() => {
-    if (drinksArr.length === 1) {
+    if (drinksArr?.length === 1) {
       history.push(`/drinks/${+drinksArr[0].idDrink}`);
     }
-  }, [drinksArr]);
+  }, [drinksArr, history]);
+
+  useEffect(() => {
+
+  }, []);
 
   const sendDrinks = () => {
+    let url = '';
     if (searchRequired.category === 'Ingredient') {
-      const url1 = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${searchRequired.searchText}`;
-      RequestDrinksAPI(url1).then((drinks) => setDrinksArr(drinks));
-    }
-    if (searchRequired.category === 'Name') {
-      const url2 = `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${searchRequired.searchText}`;
-      RequestDrinksAPI(url2).then((drinks) => setDrinksArr(drinks));
-    }
-    if (searchRequired.category === 'First Letter') {
+      url = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${searchRequired.searchText}`;
+    } else if (searchRequired.category === 'Name') {
+      url = `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${searchRequired.searchText}`;
+    } else if (searchRequired.category === 'First Letter') {
       if (searchRequired.searchText.length > 1) {
         global.alert('Your search must have only 1 (one) character');
       } else {
-        const url3 = `https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${searchRequired.searchText}`;
-        RequestDrinksAPI(url3).then((drinks) => setDrinksArr(drinks));
+        url = `https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${searchRequired.searchText}`;
       }
     }
+    RequestDrinksAPI(url).then((drinks) => setDrinksArr(drinks));
   };
 
   const sendMeal = () => {
+    let url = '';
     if (searchRequired.category === 'Ingredient') {
-      const url1 = `https://www.themealdb.com/api/json/v1/1/filter.php?i=${searchRequired.searchText}`;
-      RequestMealsAPI(url1).then((meals) => setMealsArr(meals));
-    }
-    if (searchRequired.category === 'Name') {
-      const url2 = `https://www.themealdb.com/api/json/v1/1/search.php?s=${searchRequired.searchText}`;
-      RequestMealsAPI(url2).then((meals) => setMealsArr(meals));
-    }
-    if (searchRequired.category === 'First Letter') {
+      url = `https://www.themealdb.com/api/json/v1/1/filter.php?i=${searchRequired.searchText}`;
+    } else if (searchRequired.category === 'Name') {
+      url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${searchRequired.searchText}`;
+    } else if (searchRequired.category === 'First Letter') {
       if (searchRequired.searchText.length > 1) {
         global.alert('Your search must have only 1 (one) character');
       } else {
-        const url3 = `https://www.themealdb.com/api/json/v1/1/search.php?f=${searchRequired.searchText}`;
-        RequestMealsAPI(url3).then((meals) => setMealsArr(meals));
+        url = `https://www.themealdb.com/api/json/v1/1/search.php?f=${searchRequired.searchText}`;
       }
     }
+    RequestMealsAPI(url).then((meals) => setMealsArr(meals));
   };
 
   useEffect(() => {
@@ -93,6 +92,7 @@ function SearchBar() {
               type="text"
               name="searchText"
               onChange={ handleChange }
+              value={ searchRequired.searchText }
             />
           </label>
           <label htmlFor="ingredientSearchRadio">
@@ -101,8 +101,11 @@ function SearchBar() {
               data-testid="ingredient-search-radio"
               id="ingredientSearchRadio"
               type="radio"
-              onChange={ handleChange }
+              onChange={ ({ target }) => {
+                setCategory(target.value);
+              } }
               value="Ingredient"
+              checked={ ({ target }) => category === target.value }
             />
             Ingredient
           </label>
