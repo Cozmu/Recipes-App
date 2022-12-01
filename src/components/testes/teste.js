@@ -1,12 +1,12 @@
 import { useEffect, useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
-import RecipesAppContext from '../context/RecipesAppContext';
-import requestRecipesFromAPI from '../services/requestRecipesFromAPI';
+import RecipesAppContext from '../../context/RecipesAppContext';
+import requestRecipesFromAPI from '../../services/requestRecipesFromAPI';
 
 function SearchBar() {
   const [category, setCategory] = useState('');
   const [searchFor, setSearchFor] = useState('');
-  const [isDisabled, setIsDisabled] = useState(true);
+  const [isDisabled, setIsDisabled] = useState(false);
   const history = useHistory();
   const { location: { pathname } } = history;
   const {
@@ -16,40 +16,39 @@ function SearchBar() {
   } = useContext(RecipesAppContext);
 
   useEffect(() => {
-    if (recipes && recipes.length === 1) {
+    if (recipes.length === 1) {
       const path = pathname.includes('meals')
-        ? `/meals/${recipes[0].idMeal}`
-        : `/drinks/${recipes[0].idDrink}`;
+        ? '/meals/recipes[0].idMeal'
+        : '/drinks/recipes[0].idDrink';
       history.push(path);
     }
-  }, [recipes, history, pathname]);
+  }, [recipes]);
 
   const firstLetter = 'First Letter';
-  const sendDrinks = async () => {
+  const handleClick = async () => {
     let url = '';
-    if (category === 'Ingredient') {
+    const path = pathname.includes('meals');
+    if (!path && category === 'Ingredient') {
       url = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${searchFor}`;
-    } else if (category === 'Name') {
+    }
+    if (!path && category === 'Name') {
       url = `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${searchFor}`;
-    } else if (category === firstLetter) {
-      if (searchFor.length > 1) {
+    }
+    if (!path && category === firstLetter) {
+      if (category.length > 1) {
         global.alert('Your search must have only 1 (one) character');
       } else {
         url = `https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${searchFor}`;
       }
     }
-    const result = await requestRecipesFromAPI(url);
-    setRecipes(result);
-  };
-
-  const sendMeal = async () => {
-    let url = '';
-    if (category === 'Ingredient') {
+    if (path && category === 'Ingredient') {
       url = `https://www.themealdb.com/api/json/v1/1/filter.php?i=${searchFor}`;
-    } else if (category === 'Name') {
+    }
+    if (path && category === 'Name') {
       url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${searchFor}`;
-    } else if (category === firstLetter) {
-      if (searchFor.length > 1) {
+    }
+    if (path && category === firstLetter) {
+      if (category.length > 1) {
         global.alert('Your search must have only 1 (one) character');
       } else {
         url = `https://www.themealdb.com/api/json/v1/1/search.php?f=${searchFor}`;
@@ -59,44 +58,11 @@ function SearchBar() {
     setRecipes(result);
   };
 
-  // const handleClick = async () => {
-  //   let url = '';
-  //   const path = pathname.includes('meals');
-  //   if (!path && category === 'Ingredient') {
-  //     url = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${searchFor}`;
+  // useEffect(() => {
+  //   if (searchRequired.category !== '') {
+  //     setIsDisabled(false);
   //   }
-  //   if (!path && category === 'Name') {
-  //     url = `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${searchFor}`;
-  //   }
-  //   if (!path && category === firstLetter) {
-  //     if (category.length > 1) {
-  //       global.alert('Your search must have only 1 (one) character');
-  //     } else {
-  //       url = `https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${searchFor}`;
-  //     }
-  //   }
-  //   if (path && category === 'Ingredient') {
-  //     url = `https://www.themealdb.com/api/json/v1/1/filter.php?i=${searchFor}`;
-  //   }
-  //   if (path && category === 'Name') {
-  //     url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${searchFor}`;
-  //   }
-  //   if (path && category === firstLetter) {
-  //     if (category.length > 1) {
-  //       global.alert('Your search must have only 1 (one) character');
-  //     } else {
-  //       url = `https://www.themealdb.com/api/json/v1/1/search.php?f=${searchFor}`;
-  //     }
-  //   }
-  //   const result = await requestRecipesFromAPI(url);
-  //   setRecipes(result);
-  // };
-
-  useEffect(() => {
-    if (category !== '') {
-      setIsDisabled(false);
-    }
-  }, [category]);
+  // }, [searchRequired]);
 
   return (
     <div>
@@ -152,8 +118,7 @@ function SearchBar() {
             data-testid="exec-search-btn"
             type="button"
             disabled={ isDisabled }
-            onClick={ pathname === '/meals' ? sendMeal : sendDrinks }
-            // onClick={ handleClick }
+            onClick={ handleClick }
           >
             SEARCH
           </button>

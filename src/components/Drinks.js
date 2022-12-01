@@ -4,14 +4,14 @@ import RecipesAppContext from '../context/RecipesAppContext';
 function Drinks() {
   const TWELVE = 12;
   const {
-    drinksArr,
+    recipes,
   } = useContext(RecipesAppContext);
 
   const displaysDrinks = () => {
     const arr = [];
     for (let index = 0; index < TWELVE; index += 1) {
-      if (drinksArr[index]) {
-        arr.push(drinksArr[index]);
+      if (recipes[index]) {
+        arr.push(recipes[index]);
       }
     }
     return arr;
@@ -19,7 +19,7 @@ function Drinks() {
 
   return (
     <div className="drinks">
-      {drinksArr?.length > 1
+      {recipes?.length > 1
       && displaysDrinks().map(({ strDrink, strDrinkThumb }, i) => (
         <section
           key={ i }

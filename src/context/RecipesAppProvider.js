@@ -1,36 +1,19 @@
 import PropTypes from 'prop-types';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import RecipesAppContext from './RecipesAppContext';
 
 function RecipesAppProvider({ children }) {
   const [btnSearch, setBtnSearch] = useState(false);
-  const [searchRequired, setSearchRequired] = useState({
-    searchText: '', category: 'Ingredient' });
-  const [mealsArr, setMealsArr] = useState([]);
-  const [drinksArr, setDrinksArr] = useState([]);
-
-  useEffect(() => {
-    if (mealsArr === null || drinksArr === null) {
-      global.alert('Sorry, we haven\'t found any recipes for these filters.');
-    }
-    // setSearchRequired({ searchText: '', category: '' });
-  }, [mealsArr, drinksArr]);
+  const [recipes, setRecipes] = useState([]);
 
   const values = useMemo(() => ({
     btnSearch,
     setBtnSearch,
-    setSearchRequired,
-    searchRequired,
-    setMealsArr,
-    setDrinksArr,
-    mealsArr,
-    drinksArr,
-
+    recipes,
+    setRecipes,
   }), [
-    mealsArr,
-    drinksArr,
     btnSearch,
-    searchRequired,
+    recipes,
   ]);
 
   return (
