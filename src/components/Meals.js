@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
+import { NavLink } from 'react-router-dom';
 import RecipesAppContext from '../context/RecipesAppContext';
 import requestRecipesFromAPI from '../services/requestRecipesFromAPI';
 
@@ -45,6 +46,9 @@ function Meals() {
 
   const filters = async (filterParam) => {
     setRecipes([]);
+    if (filtersCollection.length > 1) {
+      return setFiltersCollection([]);
+    }
     if (filterParam === 'Beef') {
       const resultBeef = await requestRecipesFromAPI('https://www.themealdb.com/api/json/v1/1/filter.php?c=Beef');
       setFiltersCollection(resultBeef);
@@ -60,8 +64,9 @@ function Meals() {
   }, []);
 
   const display = (filtersCollection.length === 0
-    ? displaysMeals(firstMeals).map(({ strMealThumb, strMeal }, index) => (
-      <section
+    ? displaysMeals(firstMeals).map(({ strMealThumb, strMeal, idMeal }, index) => (
+      <NavLink
+        to={ `/meals/${idMeal}` }
         key={ index }
         data-testid={ `${index}-recipe-card` }
       >
@@ -76,10 +81,11 @@ function Meals() {
           width="250"
           alt={ strMeal }
         />
-      </section>
+      </NavLink>
     )) : displaysMeals(filtersCollection)
       .map(({ strMeal, strMealThumb, idMeal }, index) => (
-        <section
+        <NavLink
+          to={ `/meals/${idMeal}` }
           key={ idMeal }
           data-testid={ `${index}-recipe-card` }
         >
@@ -94,7 +100,7 @@ function Meals() {
             alt={ idMeal }
             width="250"
           />
-        </section>
+        </NavLink>
       )));
 
   return (
@@ -121,8 +127,9 @@ function Meals() {
         </section>
       ))}
       {recipes?.length > 1 ? (recipes?.length > 1
-        && displaysMeals(recipes).map(({ strMeal, strMealThumb }, i) => (
-          <section
+        && displaysMeals(recipes).map(({ strMeal, strMealThumb, idMeal }, i) => (
+          <NavLink
+            to={ `/meals/${idMeal}` }
             key={ i }
             data-testid={ `${i}-recipe-card` }
           >
@@ -137,7 +144,7 @@ function Meals() {
               width="250"
               alt={ strMeal }
             />
-          </section>
+          </NavLink>
         )))
         : display}
     </div>

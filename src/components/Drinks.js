@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
+import { NavLink } from 'react-router-dom';
 import RecipesAppContext from '../context/RecipesAppContext';
 import requestRecipesFromAPI from '../services/requestRecipesFromAPI';
 
@@ -45,6 +46,9 @@ function Drinks() {
 
   const filters = async (filterParam) => {
     setRecipes([]);
+    if (filtersCollection.length > 1) {
+      return setFiltersCollection([]);
+    }
     if (filterParam === 'Cocktail') {
       const resultCocktail = await requestRecipesFromAPI('https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=Cocktail');
       setFiltersCollection(resultCocktail);
@@ -60,8 +64,9 @@ function Drinks() {
   }, []);
 
   const display = (filtersCollection.length === 0
-    ? displaysDrinks(firstDrinks).map(({ strDrinkThumb, strDrink }, index) => (
-      <section
+    ? displaysDrinks(firstDrinks).map(({ strDrinkThumb, strDrink, idDrink }, index) => (
+      <NavLink
+        to={ `/drinks/${idDrink}` }
         key={ index }
         data-testid={ `${index}-recipe-card` }
       >
@@ -76,10 +81,11 @@ function Drinks() {
           width="250"
           alt={ strDrink }
         />
-      </section>
+      </NavLink>
     )) : displaysDrinks(filtersCollection)
       .map(({ strDrink, strDrinkThumb, idDrink }, index) => (
-        <section
+        <NavLink
+          to={ `/drinks/${idDrink}` }
           key={ idDrink }
           data-testid={ `${index}-recipe-card` }
         >
@@ -94,7 +100,7 @@ function Drinks() {
             alt={ idDrink }
             width="250"
           />
-        </section>
+        </NavLink>
       )));
 
   return (
@@ -121,8 +127,9 @@ function Drinks() {
         </section>
       ))}
       {recipes?.length > 1 ? (recipes?.length > 1
-      && displaysDrinks(recipes).map(({ strDrink, strDrinkThumb }, i) => (
-        <section
+      && displaysDrinks(recipes).map(({ strDrink, strDrinkThumb, idDrink }, i) => (
+        <NavLink
+          to={ `/drinks/${idDrink}` }
           key={ i }
           data-testid={ `${i}-recipe-card` }
         >
@@ -137,7 +144,7 @@ function Drinks() {
             width="250"
             alt={ strDrink }
           />
-        </section>
+        </NavLink>
       ))) : display}
     </div>
   );
