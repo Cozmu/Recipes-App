@@ -1,17 +1,21 @@
-import React from 'react';
+import { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 // import { Link } from 'react-router-dom';
 import drinkIcon from '../images/drinkIcon.svg';
 import mealIcon from '../images/mealIcon.svg';
 import './Footer.css';
+import RecipesAppContext from '../context/RecipesAppContext';
 
 function Footer() {
+  const { setRecipes } = useContext(RecipesAppContext);
   const history = useHistory();
   const btnDrinks = () => {
     history.push('/drinks');
+    setRecipes([]);
   };
   const btnMeals = () => {
     history.push('/meals');
+    setRecipes([]);
   };
 
   return (

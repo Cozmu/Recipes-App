@@ -43,6 +43,8 @@ function SearchBar() {
       global.alert('Sorry, we haven\'t found any recipes for these filters.');
     }
     setRecipes(result);
+    setCategory('');
+    setSearchFor('');
   };
 
   const sendMeal = async () => {
@@ -63,6 +65,8 @@ function SearchBar() {
       global.alert('Sorry, we haven\'t found any recipes for these filters.');
     }
     setRecipes(result);
+    setCategory('');
+    setSearchFor('');
   };
 
   // const handleClick = async () => {
