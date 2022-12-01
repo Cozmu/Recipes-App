@@ -1,3 +1,4 @@
+import Footer from '../components/Footer';
 import { useHistory } from 'react-router-dom';
 import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
@@ -11,6 +12,7 @@ function Recipes() {
     <main>
       <Header />
       <SearchBar />
+      <Footer />
       { pathname === '/meals' ? <Meals /> : <Drinks /> }
     </main>
   );
