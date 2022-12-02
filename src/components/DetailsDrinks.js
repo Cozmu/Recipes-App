@@ -6,13 +6,22 @@ function DetailsDrinks() {
   const [detailsDrinks, setDetailsDrinks] = useState([]);
   const { idDaReceita } = useParams();
 
-  useEffect(() => {
+  const displayDetails = async () => {
     const result = requestRecipesFromAPI(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${idDaReceita}`);
     setDetailsDrinks(result);
+  };
+
+  useEffect(() => {
+    displayDetails();
   }, []);
 
   return (
-    <div>DetailsDrinks</div>
+    <div>
+      {/* {detailsDrinks
+      .map(({ }) => (
+
+    ))} */}
+    </div>
   );
 }
 
