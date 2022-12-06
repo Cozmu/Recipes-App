@@ -10,14 +10,14 @@ import RecipeDetails from './pages/RecipeDetails';
 function App() {
   return (
     <Switch>
-      <Route exact path="/" component={ Login } />
       <Route exact path="/meals/:idDaReceita" component={ RecipeDetails } />
       <Route exact path="/drinks/:idDaReceita" component={ RecipeDetails } />
-      <Route path="/meals" component={ Recipes } />
-      <Route path="/drinks" component={ Recipes } />
-      <Route path="/profile" component={ Profile } />
-      <Route path="/done-recipes" component={ DoneRecipes } />
-      <Route path="/favorite-recipes" component={ FavoriteRecipes } />
+      <Route exact path="/meals" component={ Recipes } />
+      <Route exact path="/drinks" component={ Recipes } />
+      <Route exact path="/profile" component={ Profile } />
+      <Route exact path="/doneRecipes" component={ DoneRecipes } />
+      <Route exact path="/favoriteRecipes" component={ FavoriteRecipes } />
+      <Route exact path="/" component={ Login } />
     </Switch>
   );
 }

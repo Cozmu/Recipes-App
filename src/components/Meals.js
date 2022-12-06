@@ -47,15 +47,15 @@ function Meals() {
   const filters = async (filterParam) => {
     setRecipes([]);
     if (filtersCollection.length > 1) {
-      return setFiltersCollection([]);
-    }
-    if (filterParam === 'Beef') {
+      setFiltersCollection([]);
+    } else if (filterParam === 'Beef') {
       const resultBeef = await requestRecipesFromAPI('https://www.themealdb.com/api/json/v1/1/filter.php?c=Beef');
       setFiltersCollection(resultBeef);
+    } else {
+      const endPoint = `https://www.themealdb.com/api/json/v1/1/filter.php?c=${filterParam}`;
+      const result = await requestRecipesFromAPI(endPoint);
+      setFiltersCollection(result);
     }
-    const endPoint = `https://www.themealdb.com/api/json/v1/1/filter.php?c=${filterParam}`;
-    const result = await requestRecipesFromAPI(endPoint);
-    setFiltersCollection(result);
   };
 
   useEffect(() => {
@@ -126,8 +126,8 @@ function Meals() {
           </button>
         </section>
       ))}
-      {recipes?.length > 1 ? (recipes?.length > 1
-        && displaysMeals(recipes).map(({ strMeal, strMealThumb, idMeal }, i) => (
+      {recipes?.length > 1
+        ? displaysMeals(recipes).map(({ strMeal, strMealThumb, idMeal }, i) => (
           <NavLink
             to={ `/meals/${idMeal}` }
             key={ i }
@@ -145,7 +145,7 @@ function Meals() {
               alt={ strMeal }
             />
           </NavLink>
-        )))
+        ))
         : display}
     </div>
   );

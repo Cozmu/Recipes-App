@@ -1,17 +1,39 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, NavLink } from 'react-router-dom';
 import requestRecipesFromAPI from '../services/requestRecipesFromAPI';
 
 function DetailsMeals() {
-  const [detailsMeals, setDetailsMeals] = useState([]);
+  const [recipePhoto, setRecipePhoto] = useState('');
+  const [recipeTitle, setRecipeTitle] = useState('');
+  const [recipeCategory, setRecipeCategory] = useState('');
+  const [instructions, setInstructions] = useState('');
+  const [ingredientAndMeasure, setIngredientAndMeasure] = useState([]);
+  const [video, setVideo] = useState('');
   const { idDaReceita } = useParams();
+
+  const handleFilter = (receita) => {
+    const TWENTY = 20;
+    const arr = [];
+    for (let index = 1; index <= TWENTY; index += 1) {
+      if (receita[0][`strIngredient${index}`] !== ''
+       && receita[0][`strIngredient${index}`] !== null) {
+        arr.push(`${receita[0][`strIngredient${index}`]} 
+          ${receita[0][`strMeasure${index}`]}`);
+      }
+    }
+    setIngredientAndMeasure(arr);
+  };
 
   const displayDetails = async () => {
     const result = await requestRecipesFromAPI(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${idDaReceita}`);
+    handleFilter(result);
+    setRecipePhoto(result[0].strMealThumb);
+    setRecipeTitle(result[0].strMeal);
+    setRecipeCategory(result[0].strCategory);
+    setInstructions(result[0].strInstructions);
     const ytLink = result[0].strYoutube;
-    const arrYT = ytLink.split('watch?v=');
-    console.log(arrYT);
-    setDetailsMeals(result);
+    const YT = ytLink.split('watch?v=');
+    setVideo(YT);
   };
 
   useEffect(() => {
@@ -20,43 +42,53 @@ function DetailsMeals() {
 
   return (
     <div>
-      {detailsMeals
-        .map(({
-          strMeal, strCategory, strInstructions,
-          strMealThumb, idMeal,
-        }) => (
-          <section
-            key={ idMeal }
+      <NavLink
+        to="/meals"
+      >
+        Voltar
+      </NavLink>
+      <img
+        width="250"
+        data-testid="recipe-photo"
+        src={ recipePhoto }
+        alt={ idDaReceita }
+      />
+      <h3
+        data-testid="recipe-title"
+      >
+        {recipeTitle}
+      </h3>
+      <h4
+        data-testid="recipe-category"
+      >
+        {recipeCategory}
+      </h4>
+
+      <ul>
+        {ingredientAndMeasure.map((e, i) => (
+          <li
+            data-testid={ `${i}-ingredient-name-and-measure` }
+            key={ i }
           >
-            <img
-              width="250"
-              data-testid="recipe-photo"
-              src={ strMealThumb }
-              alt={ idMeal }
-            />
-            <h3
-              data-testid="recipe-title"
-            >
-              {strMeal}
-            </h3>
-            <h4
-              data-testid="recipe-category"
-            >
-              {strCategory}
-            </h4>
-            <p>{strInstructions}</p>
-            {/* <iframe
-              data-testid="video"
-              src={ strYoutube }
-              title={ strMeal }
-              frameBorder="0"
-              allow="accelerometer; autoplay;
-              clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            /> */}
-            <iframe width="853" height="480" src="https://www.youtube.com/embed/ub68OxEypaY" title="Easy Authentic Sushi Hand Rolls At Home (Temaki)" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
-          </section>
+            {e}
+          </li>
         ))}
+      </ul>
+      <p
+        data-testid="instructions"
+      >
+        {instructions}
+
+      </p>
+      <iframe
+        data-testid="video"
+        src={ `${video[0]}embed/${video[1]}` }
+        title={ recipeTitle }
+        frameBorder="0"
+        allow="accelerometer; autoplay;
+              clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+      />
     </div>
   );
 }
