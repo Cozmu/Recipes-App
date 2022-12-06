@@ -8,6 +8,7 @@ function DetailsMeals() {
   const [recipeCategory, setRecipeCategory] = useState('');
   const [instructions, setInstructions] = useState('');
   const [ingredientAndMeasure, setIngredientAndMeasure] = useState([]);
+  const [recommendations, setRecommendations] = useState([]);
   const [video, setVideo] = useState('');
   const { idDaReceita } = useParams();
 
@@ -36,8 +37,14 @@ function DetailsMeals() {
     setVideo(YT);
   };
 
+  const displayRecommendations = async () => {
+    const result = await requestRecipesFromAPI('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
+    setRecommendations(result);
+  };
+
   useEffect(() => {
     displayDetails();
+    displayRecommendations();
   }, []);
 
   return (

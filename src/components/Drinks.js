@@ -47,15 +47,15 @@ function Drinks() {
   const filters = async (filterParam) => {
     setRecipes([]);
     if (filtersCollection.length > 1) {
-      return setFiltersCollection([]);
-    }
-    if (filterParam === 'Cocktail') {
+      setFiltersCollection([]);
+    } else if (filterParam === 'Cocktail') {
       const resultCocktail = await requestRecipesFromAPI('https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=Cocktail');
       setFiltersCollection(resultCocktail);
+    } else {
+      const endPoint = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${filterParam}`;
+      const result = await requestRecipesFromAPI(endPoint);
+      setFiltersCollection(result);
     }
-    const endPoint = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${filterParam}`;
-    const result = await requestRecipesFromAPI(endPoint);
-    setFiltersCollection(result);
   };
 
   useEffect(() => {

@@ -8,6 +8,7 @@ function DetailsDrinks() {
   const [recipeAlcoholic, setRecipeAlcoholic] = useState('');
   const [instructions, setInstructions] = useState('');
   const [ingredientAndMeasure, setIngredientAndMeasure] = useState([]);
+  const [recommendations, setRecommendations] = useState([]);
   const { idDaReceita } = useParams();
 
   const handleFilter = (receita) => {
@@ -31,8 +32,14 @@ function DetailsDrinks() {
     setInstructions(result[0].strInstructions);
   };
 
+  const displayRecommendations = async () => {
+    const result = await requestRecipesFromAPI('https://www.themealdb.com/api/json/v1/1/search.php?s=');
+    setRecommendations(result);
+  };
+
   useEffect(() => {
     displayDetails();
+    displayRecommendations();
   }, []);
 
   return (
