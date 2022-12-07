@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useParams, NavLink } from 'react-router-dom';
 import requestRecipesFromAPI from '../services/requestRecipesFromAPI';
+import display from '../helpers/display';
+import '../style/Details.css';
 
 function DetailsMeals() {
+  const SIX = 6;
   const [recipePhoto, setRecipePhoto] = useState('');
   const [recipeTitle, setRecipeTitle] = useState('');
   const [recipeCategory, setRecipeCategory] = useState('');
@@ -37,14 +40,14 @@ function DetailsMeals() {
     setVideo(YT);
   };
 
-  const displayRecommendations = async () => {
+  const requestRecommendations = async () => {
     const result = await requestRecipesFromAPI('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
     setRecommendations(result);
   };
 
   useEffect(() => {
     displayDetails();
-    displayRecommendations();
+    requestRecommendations();
   }, []);
 
   return (
@@ -96,6 +99,25 @@ function DetailsMeals() {
               clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
       />
+      <section
+        className="recommendationCard-container"
+      >
+        {display(SIX, recommendations).map(({ strDrink, strDrinkThumb }, index) => (
+          <NavLink
+            to="/"
+            className="recommendationCard"
+            key={ index }
+            data-testid={ `${index}-recommendation-card` }
+          >
+            <p
+              data-testid={ `${index}-recommendation-title` }
+            >
+              {strDrink}
+            </p>
+            <img src={ strDrinkThumb } alt={ strDrink } />
+          </NavLink>
+        ))}
+      </section>
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import RecipesAppContext from '../context/RecipesAppContext';
 import requestRecipesFromAPI from '../services/requestRecipesFromAPI';
+import display from '../helpers/display';
 
 function Drinks() {
   const [firstDrinks, setFirstDrinks] = useState([]);
@@ -13,26 +14,6 @@ function Drinks() {
     recipes,
     setRecipes,
   } = useContext(RecipesAppContext);
-
-  const displaysDrinks = (drinks) => {
-    const arr = [];
-    for (let index = 0; index < TWELVE; index += 1) {
-      if (drinks[index]) {
-        arr.push(drinks[index]);
-      }
-    }
-    return arr;
-  };
-
-  const displaysCategorys = (categorys) => {
-    const arr = [];
-    for (let index = 0; index < FIVE; index += 1) {
-      if (categorys[index]) {
-        arr.push(categorys[index]);
-      }
-    }
-    return arr;
-  };
 
   const firstRecipes = async () => {
     const result = await requestRecipesFromAPI('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
@@ -63,8 +44,8 @@ function Drinks() {
     firstRecipes();
   }, []);
 
-  const display = (filtersCollection.length === 0
-    ? displaysDrinks(firstDrinks).map(({ strDrinkThumb, strDrink, idDrink }, index) => (
+  const rendeizacao = (filtersCollection.length === 0
+    ? display(TWELVE, firstDrinks).map(({ strDrinkThumb, strDrink, idDrink }, index) => (
       <NavLink
         to={ `/drinks/${idDrink}` }
         key={ index }
@@ -82,7 +63,7 @@ function Drinks() {
           alt={ strDrink }
         />
       </NavLink>
-    )) : displaysDrinks(filtersCollection)
+    )) : display(TWELVE, filtersCollection)
       .map(({ strDrink, strDrinkThumb, idDrink }, index) => (
         <NavLink
           to={ `/drinks/${idDrink}` }
@@ -115,7 +96,7 @@ function Drinks() {
       >
         All
       </button>
-      {displaysCategorys(drinksCategorys).map(({ strCategory }) => (
+      {display(FIVE, drinksCategorys).map(({ strCategory }) => (
         <section key={ strCategory }>
           <button
             type="button"
@@ -127,7 +108,7 @@ function Drinks() {
         </section>
       ))}
       {recipes?.length > 1 ? (recipes?.length > 1
-      && displaysDrinks(recipes).map(({ strDrink, strDrinkThumb, idDrink }, i) => (
+      && display(TWELVE, recipes).map(({ strDrink, strDrinkThumb, idDrink }, i) => (
         <NavLink
           to={ `/drinks/${idDrink}` }
           key={ i }
@@ -145,7 +126,7 @@ function Drinks() {
             alt={ strDrink }
           />
         </NavLink>
-      ))) : display}
+      ))) : rendeizacao}
     </div>
   );
 }

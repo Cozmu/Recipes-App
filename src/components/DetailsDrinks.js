@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useParams, NavLink } from 'react-router-dom';
 import requestRecipesFromAPI from '../services/requestRecipesFromAPI';
+import display from '../helpers/display';
+import '../style/Details.css';
 
 function DetailsDrinks() {
+  const SIX = 6;
   const [recipePhoto, setRecipePhoto] = useState('');
   const [recipeTitle, setRecipeTitle] = useState('');
   const [recipeAlcoholic, setRecipeAlcoholic] = useState('');
@@ -32,14 +35,14 @@ function DetailsDrinks() {
     setInstructions(result[0].strInstructions);
   };
 
-  const displayRecommendations = async () => {
+  const requestRecommendations = async () => {
     const result = await requestRecipesFromAPI('https://www.themealdb.com/api/json/v1/1/search.php?s=');
     setRecommendations(result);
   };
 
   useEffect(() => {
     displayDetails();
-    displayRecommendations();
+    requestRecommendations();
   }, []);
 
   return (
@@ -81,6 +84,25 @@ function DetailsDrinks() {
         {instructions}
 
       </p>
+      <section
+        className="recommendationCard-container"
+      >
+        {display(SIX, recommendations).map(({ strMeal, strMealThumb }, index) => (
+          <NavLink
+            to="/"
+            className="recommendationCard"
+            key={ index }
+            data-testid={ `${index}-recommendation-card` }
+          >
+            <p
+              data-testid={ `${index}-recommendation-title` }
+            >
+              {strMeal}
+            </p>
+            <img src={ strMealThumb } alt={ strMeal } />
+          </NavLink>
+        ))}
+      </section>
     </div>
   );
 }

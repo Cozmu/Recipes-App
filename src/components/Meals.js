@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import RecipesAppContext from '../context/RecipesAppContext';
 import requestRecipesFromAPI from '../services/requestRecipesFromAPI';
+import display from '../helpers/display';
 
 function Meals() {
   const [firstMeals, setFirstMeals] = useState([]);
@@ -13,26 +14,6 @@ function Meals() {
     recipes,
     setRecipes,
   } = useContext(RecipesAppContext);
-
-  const displaysMeals = (meals) => {
-    const arr = [];
-    for (let index = 0; index < TWELVE; index += 1) {
-      if (meals[index]) {
-        arr.push(meals[index]);
-      }
-    }
-    return arr;
-  };
-
-  const displaysCategorys = (categorys) => {
-    const arr = [];
-    for (let index = 0; index < FIVE; index += 1) {
-      if (categorys[index]) {
-        arr.push(categorys[index]);
-      }
-    }
-    return arr;
-  };
 
   const firstRecipes = async () => {
     const result = await requestRecipesFromAPI('https://www.themealdb.com/api/json/v1/1/search.php?s=');
@@ -63,8 +44,8 @@ function Meals() {
     firstRecipes();
   }, []);
 
-  const display = (filtersCollection.length === 0
-    ? displaysMeals(firstMeals).map(({ strMealThumb, strMeal, idMeal }, index) => (
+  const rendeizacao = (filtersCollection.length === 0
+    ? display(TWELVE, firstMeals).map(({ strMealThumb, strMeal, idMeal }, index) => (
       <NavLink
         to={ `/meals/${idMeal}` }
         key={ index }
@@ -82,7 +63,7 @@ function Meals() {
           alt={ strMeal }
         />
       </NavLink>
-    )) : displaysMeals(filtersCollection)
+    )) : display(TWELVE, filtersCollection)
       .map(({ strMeal, strMealThumb, idMeal }, index) => (
         <NavLink
           to={ `/meals/${idMeal}` }
@@ -115,7 +96,7 @@ function Meals() {
       >
         All
       </button>
-      {displaysCategorys(mealsCategorys).map(({ strCategory }) => (
+      {display(FIVE, mealsCategorys).map(({ strCategory }) => (
         <section key={ strCategory }>
           <button
             type="button"
@@ -127,7 +108,7 @@ function Meals() {
         </section>
       ))}
       {recipes?.length > 1
-        ? displaysMeals(recipes).map(({ strMeal, strMealThumb, idMeal }, i) => (
+        ? display(TWELVE, recipes).map(({ strMeal, strMealThumb, idMeal }, i) => (
           <NavLink
             to={ `/meals/${idMeal}` }
             key={ i }
@@ -146,7 +127,7 @@ function Meals() {
             />
           </NavLink>
         ))
-        : display}
+        : rendeizacao}
     </div>
   );
 }
