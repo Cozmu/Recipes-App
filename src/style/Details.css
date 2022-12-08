@@ -1,0 +1,23 @@
+.recommendationCard-container {
+  display: flex;
+  gap: 10px;
+  overflow-x: scroll;
+}
+
+.recommendationCard {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  min-width: 180px;
+}
+
+.recommendationCard img {
+  width: 100px;
+}
+
+.start-recipe-btn {
+  bottom: 0;
+  height: 70px;
+  position: fixed;
+  width: 70px;
+}
