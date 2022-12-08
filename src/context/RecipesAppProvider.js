@@ -5,15 +5,16 @@ import RecipesAppContext from './RecipesAppContext';
 function RecipesAppProvider({ children }) {
   const storeFav = JSON.parse(localStorage.getItem('favoriteRecipes'));
   const store = JSON.parse(localStorage.getItem('inProgressRecipes'));
-  const [favorits, setFavorits] = useState(storeFav || []);
+  const [isFavorite, setIsFavorite] = useState('');
+  const [favorites, setFavorites] = useState(storeFav || []);
   const [btnSearch, setBtnSearch] = useState(false);
   const [recipes, setRecipes] = useState([]);
   const [inProgressRecipes,
     setInProgressRecipes] = useState(store || { drinks: {}, meals: {} });
 
   useEffect(() => {
-    localStorage.setItem('favoriteRecipes', JSON.stringify(favorits));
-  }, [favorits]);
+    localStorage.setItem('favoriteRecipes', JSON.stringify(favorites));
+  }, [favorites]);
 
   const values = useMemo(() => ({
     setInProgressRecipes,
@@ -22,10 +23,13 @@ function RecipesAppProvider({ children }) {
     setBtnSearch,
     recipes,
     setRecipes,
-    setFavorits,
-    favorits,
+    setFavorites,
+    favorites,
+    isFavorite,
+    setIsFavorite,
   }), [
-    favorits,
+    isFavorite,
+    favorites,
     inProgressRecipes,
     btnSearch,
     recipes,
