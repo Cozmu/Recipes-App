@@ -10,11 +10,10 @@ import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 
 function DetailsMeals() {
-  const [isFavorite, setIsFavorite] = useState(false);
   const [toggleShare, setToggleShare] = useState(false);
   const [resultAPI, setResultAPI] = useState([]);
   const { inProgressRecipes, setInProgressRecipes,
-    favorits, setFavorits } = useContext(RecipesAppContext);
+    favorites, setFavorites, isFavorite, setIsFavorite } = useContext(RecipesAppContext);
   const history = useHistory();
   const SIX = 6;
   const [recipePhoto, setRecipePhoto] = useState('');
@@ -60,7 +59,21 @@ function DetailsMeals() {
   useEffect(() => {
     displayDetails();
     requestRecommendations();
+    const storeFav = JSON.parse(localStorage.getItem('favoriteRecipes'));
+    if (storeFav?.some((e) => e.id === idDaReceita)) {
+      setIsFavorite(blackHeartIcon);
+    } else {
+      setIsFavorite(whiteHeartIcon);
+    }
   }, []);
+
+  useEffect(() => {
+    if (favorites?.some((e) => e.id === idDaReceita)) {
+      setIsFavorite(blackHeartIcon);
+    } else {
+      setIsFavorite(whiteHeartIcon);
+    }
+  }, [favorites]);
 
   const rrp = () => { // redirect to recipe in progress
     setInProgressRecipes({
@@ -80,9 +93,23 @@ function DetailsMeals() {
     return recipesID.includes(idDaReceita) ? 'Continue Recipe' : 'Start Recipe';
   };
 
-  useEffect(() => {
-    setIsFavorite(!isFavorite);
-  }, [favorits]);
+  const toggleFavorite = () => {
+    const newFav = {
+      id: resultAPI[0].idMeal,
+      type: 'meal',
+      nationality: resultAPI[0].strArea,
+      category: resultAPI[0].strCategory,
+      alcoholicOrNot: '',
+      name: resultAPI[0].strMeal,
+      image: resultAPI[0].strMealThumb,
+    };
+    if (favorites.some((e) => e.id === newFav.id)) {
+      const deteleFav = favorites.filter((e) => e.id !== newFav.id);
+      setFavorites(deteleFav);
+    } else {
+      setFavorites([...favorites, newFav]);
+    }
+  };
 
   return (
     <div>
@@ -108,25 +135,14 @@ function DetailsMeals() {
         {recipeCategory}
       </h4>
       <button
-        src={ isFavorite ? whiteHeartIcon : blackHeartIcon }
-        data-testid="favorite-btn"
         type="button"
-        onClick={ () => {
-          const newFav = {
-            id: resultAPI[0].idMeal,
-            type: 'meal',
-            nationality: resultAPI[0].strArea,
-            category: resultAPI[0].strCategory,
-            alcoholicOrNot: '',
-            name: resultAPI[0].strMeal,
-            image: resultAPI[0].strMealThumb,
-          };
-          if (!favorits.some((e) => e.id === newFav.id)) {
-            setFavorits([...favorits, newFav]);
-          }
-        } }
+        onClick={ toggleFavorite }
       >
-        <img src={ isFavorite ? whiteHeartIcon : blackHeartIcon } alt="Favorite" />
+        <img
+          data-testid="favorite-btn"
+          src={ isFavorite }
+          alt="Favorite"
+        />
       </button>
       <button
         type="button"
