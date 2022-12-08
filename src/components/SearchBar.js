@@ -28,7 +28,7 @@ function SearchBar() {
   const sendDrinks = async () => {
     let url = '';
     if (category === 'Ingredient') {
-      url = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${searchFor}`; // quebra em erro de busca
+      url = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${searchFor}`;
     } else if (category === 'Name') {
       url = `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${searchFor}`;
     } else if (category === firstLetter) {
