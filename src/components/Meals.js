@@ -112,6 +112,7 @@ function Meals() {
         } }
         data-testid="All-category-filter"
         type="button"
+        className="buttonsMeals"
       >
         All
       </button>

@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
+import teste from '../img/picwish.png';
 // import { useHistory } from 'react-router-dom';
 
 function Login({ history }) {
@@ -23,10 +24,12 @@ function Login({ history }) {
   };
 
   return (
-    <div>
+    <div className="loginInitial">
+      <img src={ teste } alt="logo" className="logo" />
       <label htmlFor="emailInput">
         <input
           data-testid="email-input"
+          className="inputEmailCss"
           id="emailInput"
           type="text"
           placeholder="E-mail"
@@ -39,6 +42,7 @@ function Login({ history }) {
       </label>
       <label htmlFor="passwordInput">
         <input
+          className="inputSenhaCss"
           data-testid="password-input"
           id="passwordInput"
           placeholder="Senha"
@@ -53,6 +57,7 @@ function Login({ history }) {
         data-testid="login-submit-btn"
         disabled={ isDisabled }
         onClick={ handleSubmite }
+        className="btnCss"
       >
         Enter
       </button>
