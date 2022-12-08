@@ -1,10 +1,21 @@
-import { useEffect, useState } from 'react';
-import { useParams, NavLink } from 'react-router-dom';
+import { useEffect, useState, useContext } from 'react';
+import { useParams, NavLink, useHistory } from 'react-router-dom';
+import copy from 'clipboard-copy';
 import requestRecipesFromAPI from '../services/requestRecipesFromAPI';
 import display from '../helpers/display';
 import '../style/Details.css';
+import RecipesAppContext from '../context/RecipesAppContext';
+import shareIncon from '../images/shareIcon.svg';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
 
 function DetailsMeals() {
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [toggleShare, setToggleShare] = useState(false);
+  const [resultAPI, setResultAPI] = useState([]);
+  const { inProgressRecipes, setInProgressRecipes,
+    favorits, setFavorits } = useContext(RecipesAppContext);
+  const history = useHistory();
   const SIX = 6;
   const [recipePhoto, setRecipePhoto] = useState('');
   const [recipeTitle, setRecipeTitle] = useState('');
@@ -30,6 +41,7 @@ function DetailsMeals() {
 
   const displayDetails = async () => {
     const result = await requestRecipesFromAPI(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${idDaReceita}`);
+    setResultAPI(result);
     handleFilter(result);
     setRecipePhoto(result[0].strMealThumb);
     setRecipeTitle(result[0].strMeal);
@@ -49,6 +61,28 @@ function DetailsMeals() {
     displayDetails();
     requestRecommendations();
   }, []);
+
+  const rrp = () => { // redirect to recipe in progress
+    setInProgressRecipes({
+      ...inProgressRecipes,
+      meals: {
+        ...inProgressRecipes.meals,
+        [idDaReceita]: [],
+      },
+    });
+    history.push(`/meals/${idDaReceita}/in-progress`);
+  };
+
+  const toggleInProgress = () => {
+    const storage = JSON.parse(localStorage.getItem('inProgressRecipes'))
+    || { drinks: {}, meals: {} };
+    const recipesID = Object.keys(storage.meals);
+    return recipesID.includes(idDaReceita) ? 'Continue Recipe' : 'Start Recipe';
+  };
+
+  useEffect(() => {
+    setIsFavorite(!isFavorite);
+  }, [favorits]);
 
   return (
     <div>
@@ -73,7 +107,42 @@ function DetailsMeals() {
       >
         {recipeCategory}
       </h4>
-
+      <button
+        src={ isFavorite ? whiteHeartIcon : blackHeartIcon }
+        data-testid="favorite-btn"
+        type="button"
+        onClick={ () => {
+          const newFav = {
+            id: resultAPI[0].idMeal,
+            type: 'meal',
+            nationality: resultAPI[0].strArea,
+            category: resultAPI[0].strCategory,
+            alcoholicOrNot: '',
+            name: resultAPI[0].strMeal,
+            image: resultAPI[0].strMealThumb,
+          };
+          if (!favorits.some((e) => e.id === newFav.id)) {
+            setFavorits([...favorits, newFav]);
+          }
+        } }
+      >
+        <img src={ isFavorite ? whiteHeartIcon : blackHeartIcon } alt="Favorite" />
+      </button>
+      <button
+        type="button"
+        data-testid="share-btn"
+        onClick={ () => {
+          const TIME = 3000;
+          copy(`http://localhost:3000/meals/${idDaReceita}`);
+          setToggleShare(true);
+          setTimeout(() => {
+            setToggleShare(false);
+          }, TIME);
+        } }
+      >
+        <img src={ shareIncon } alt="Compartilhar" />
+      </button>
+      {toggleShare && <span>Link copied!</span>}
       <ul>
         {ingredientAndMeasure.map((e, i) => (
           <li
@@ -102,22 +171,31 @@ function DetailsMeals() {
       <section
         className="recommendationCard-container"
       >
-        {display(SIX, recommendations).map(({ strDrink, strDrinkThumb }, index) => (
-          <NavLink
-            to="/"
-            className="recommendationCard"
-            key={ index }
-            data-testid={ `${index}-recommendation-card` }
-          >
-            <p
-              data-testid={ `${index}-recommendation-title` }
+        {display(SIX, recommendations)
+          .map(({ strDrink, strDrinkThumb, idDrink }, index) => (
+            <NavLink
+              to={ `/drinks/${idDrink}` }
+              className="recommendationCard"
+              key={ index }
+              data-testid={ `${index}-recommendation-card` }
             >
-              {strDrink}
-            </p>
-            <img src={ strDrinkThumb } alt={ strDrink } />
-          </NavLink>
-        ))}
+              <p
+                data-testid={ `${index}-recommendation-title` }
+              >
+                {strDrink}
+              </p>
+              <img src={ strDrinkThumb } alt={ strDrink } />
+            </NavLink>
+          ))}
       </section>
+      <button
+        className="start-recipe-btn"
+        data-testid="start-recipe-btn"
+        type="button"
+        onClick={ rrp } // redirect to recipe in progress
+      >
+        { toggleInProgress() }
+      </button>
     </div>
   );
 }

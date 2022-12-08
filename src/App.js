@@ -6,10 +6,21 @@ import Profile from './pages/Profile';
 import DoneRecipes from './pages/DoneRecipes';
 import FavoriteRecipes from './pages/FavoriteRecipes';
 import RecipeDetails from './pages/RecipeDetails';
+import RecipeInProgress from './pages/RecipeInProgress';
 
 function App() {
   return (
     <Switch>
+      <Route
+        exact
+        path="/drinks/:idDaReceita/in-progress"
+        component={ RecipeInProgress }
+      />
+      <Route
+        exact
+        path="/meals/:idDaReceita/in-progress"
+        component={ RecipeInProgress }
+      />
       <Route exact path="/meals/:idDaReceita" component={ RecipeDetails } />
       <Route exact path="/drinks/:idDaReceita" component={ RecipeDetails } />
       <Route exact path="/meals" component={ Recipes } />
