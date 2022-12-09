@@ -4,8 +4,13 @@ import RecipesAppContext from '../context/RecipesAppContext';
 import requestRecipesFromAPI from '../services/requestRecipesFromAPI';
 import handleFilter from '../helpers/handleFilter';
 import InteractionBtns from './InteractionBtns';
+import '../style/RecipeInProgress.css';
 
 function RecipeMealsInProgress() {
+  const { idDaReceita } = useParams();
+  const store = JSON.parse(localStorage.getItem('inProgressRecipes'));
+  const recipeKey = store?.meals[idDaReceita];
+  const [isChecked, setIsChecked] = useState(recipeKey || []);
   const [newFav, setNewFav] = useState({});
   const [recipePhoto, setRecipePhoto] = useState('');
   const [recipeTitle, setRecipeTitle] = useState('');
@@ -13,7 +18,14 @@ function RecipeMealsInProgress() {
   const [instructions, setInstructions] = useState('');
   const [ingredientAndMeasure, setIngredientAndMeasure] = useState([]);
   const { inProgressRecipes } = useContext(RecipesAppContext);
-  const { idDaReceita } = useParams();
+
+  useEffect(() => {
+    const storeInProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    if (storeInProgress?.meals[idDaReceita]) {
+      localStorage.setItem('inProgressRecipes', JSON
+        .stringify({ ...storeInProgress, meals: { [idDaReceita]: isChecked } }));
+    }
+  }, [isChecked]);
 
   const requestDetails = async () => {
     const TWENTY = 20;
@@ -40,6 +52,13 @@ function RecipeMealsInProgress() {
     localStorage.setItem('inProgressRecipes', JSON.stringify(inProgressRecipes));
     requestDetails();
   }, []);
+
+  const itsChecked = (ingrediente) => {
+    if (isChecked.includes(ingrediente)) {
+      return 'ingredient-step';
+    }
+    return '';
+  };
 
   return (
     <div>
@@ -73,6 +92,30 @@ function RecipeMealsInProgress() {
       >
         {instructions}
       </p>
+      {ingredientAndMeasure.map((e, index) => (
+        <label
+          data-testid={ `${index}-ingredient-step` }
+          htmlFor="ingredient-step"
+          key={ index }
+          className={ itsChecked(e) }
+        >
+          <input
+            id="ingredient-step"
+            type="checkbox"
+            value={ e }
+            onChange={ ({ target }) => {
+              if (isChecked.some((ingredient) => ingredient === target.value)) {
+                const newChecked = isChecked.filter((el) => el !== target.value);
+                setIsChecked(newChecked);
+              } else {
+                setIsChecked([...isChecked, target.value]);
+              }
+            } }
+            checked={ isChecked.includes(e) }
+          />
+          {e}
+        </label>
+      ))}
       <button
         data-testid="finish-recipe-btn"
         type="button"

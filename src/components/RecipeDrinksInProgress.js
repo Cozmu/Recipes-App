@@ -4,8 +4,10 @@ import RecipesAppContext from '../context/RecipesAppContext';
 import requestRecipesFromAPI from '../services/requestRecipesFromAPI';
 import handleFilter from '../helpers/handleFilter';
 import InteractionBtns from './InteractionBtns';
+import '../style/RecipeInProgress.css';
 
 function RecipeDrinksInProgress() {
+  const [isChecked, setIsChecked] = useState([]);
   const [newFav, setNewFav] = useState({});
   const [recipePhoto, setRecipePhoto] = useState('');
   const [recipeTitle, setRecipeTitle] = useState('');
@@ -14,6 +16,8 @@ function RecipeDrinksInProgress() {
   const [ingredientAndMeasure, setIngredientAndMeasure] = useState([]);
   const { inProgressRecipes } = useContext(RecipesAppContext);
   const { idDaReceita } = useParams();
+
+  console.log(isChecked);
 
   const requestDetails = async () => {
     const FIFTEEN = 15;
@@ -40,6 +44,13 @@ function RecipeDrinksInProgress() {
     localStorage.setItem('inProgressRecipes', JSON.stringify(inProgressRecipes));
     requestDetails();
   }, []);
+
+  const itsChecked = (ingrediente) => {
+    if (isChecked.includes(ingrediente)) {
+      return 'ingredient-step';
+    }
+    return '';
+  };
 
   return (
     <div>
@@ -73,6 +84,30 @@ function RecipeDrinksInProgress() {
       >
         {instructions}
       </p>
+      {ingredientAndMeasure.map((e, index) => (
+        <label
+          data-testid={ `${index}-ingredient-step` }
+          htmlFor="ingredient-step"
+          className={ itsChecked(e) }
+          key={ index }
+        >
+          <input
+            id="ingredient-step"
+            type="checkbox"
+            value={ e }
+            onChange={ ({ target }) => {
+              if (isChecked.some((ingredient) => ingredient === target.value)) {
+                const newChecked = isChecked.filter((el) => el !== target.value);
+                setIsChecked(newChecked);
+              } else {
+                setIsChecked([...isChecked, target.value]);
+              }
+            } }
+            checked={ isChecked.includes(e) }
+          />
+          {e}
+        </label>
+      ))}
       <button
         data-testid="finish-recipe-btn"
         type="button"

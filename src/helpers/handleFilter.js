@@ -3,8 +3,8 @@ const handleFilter = (receita, quantidade) => {
   for (let index = 1; index <= quantidade; index += 1) {
     if (receita[0][`strIngredient${index}`] !== ''
        && receita[0][`strIngredient${index}`] !== null) {
-      arr.push(`${receita[0][`strIngredient${index}`]} 
-          ${receita[0][`strMeasure${index}`]}`);
+      arr.push(`${receita[0][`strIngredient${index}`]} ${receita[0][`strMeasure${index}`]
+      }`);
     }
   }
   return arr;
