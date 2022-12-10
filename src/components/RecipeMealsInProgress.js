@@ -17,14 +17,16 @@ function RecipeMealsInProgress() {
   const [recipeCategory, setRecipeCategory] = useState('');
   const [instructions, setInstructions] = useState('');
   const [ingredientAndMeasure, setIngredientAndMeasure] = useState([]);
-  const { inProgressRecipes } = useContext(RecipesAppContext);
+  const { inProgressRecipes, setInProgressRecipes } = useContext(RecipesAppContext);
 
   useEffect(() => {
-    const storeInProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    if (storeInProgress?.meals[idDaReceita]) {
-      localStorage.setItem('inProgressRecipes', JSON
-        .stringify({ ...storeInProgress, meals: { [idDaReceita]: isChecked } }));
-    }
+    setInProgressRecipes({
+      ...inProgressRecipes,
+      meals: {
+        ...inProgressRecipes.meals,
+        [idDaReceita]: isChecked,
+      },
+    });
   }, [isChecked]);
 
   const requestDetails = async () => {

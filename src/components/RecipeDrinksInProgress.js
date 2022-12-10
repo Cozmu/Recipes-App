@@ -7,17 +7,27 @@ import InteractionBtns from './InteractionBtns';
 import '../style/RecipeInProgress.css';
 
 function RecipeDrinksInProgress() {
-  const [isChecked, setIsChecked] = useState([]);
+  const { idDaReceita } = useParams();
+  const store = JSON.parse(localStorage.getItem('inProgressRecipes'));
+  const recipeKey = store?.drinks[idDaReceita];
+  const [isChecked, setIsChecked] = useState(recipeKey || []);
   const [newFav, setNewFav] = useState({});
   const [recipePhoto, setRecipePhoto] = useState('');
   const [recipeTitle, setRecipeTitle] = useState('');
   const [recipeAlcoholic, setRecipeAlcoholic] = useState('');
   const [instructions, setInstructions] = useState('');
   const [ingredientAndMeasure, setIngredientAndMeasure] = useState([]);
-  const { inProgressRecipes } = useContext(RecipesAppContext);
-  const { idDaReceita } = useParams();
+  const { inProgressRecipes, setInProgressRecipes } = useContext(RecipesAppContext);
 
-  console.log(isChecked);
+  useEffect(() => {
+    setInProgressRecipes({
+      ...inProgressRecipes,
+      drinks: {
+        ...inProgressRecipes.drinks,
+        [idDaReceita]: isChecked,
+      },
+    });
+  }, [isChecked]);
 
   const requestDetails = async () => {
     const FIFTEEN = 15;

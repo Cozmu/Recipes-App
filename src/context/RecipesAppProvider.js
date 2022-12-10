@@ -13,6 +13,10 @@ function RecipesAppProvider({ children }) {
     setInProgressRecipes] = useState(store || { drinks: {}, meals: {} });
 
   useEffect(() => {
+    localStorage.setItem('inProgressRecipes', JSON.stringify(inProgressRecipes));
+  }, [inProgressRecipes]);
+
+  useEffect(() => {
     localStorage.setItem('favoriteRecipes', JSON.stringify(favorites));
   }, [favorites]);
 
