@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useEffect, useContext, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import copy from 'clipboard-copy';
 import RecipesAppContext from '../context/RecipesAppContext';
 import shareIcon from '../images/shareIcon.svg';
@@ -10,6 +11,8 @@ function InteractionBtns({ idDaReceita, newFav }) {
   const [toggleShare, setToggleShare] = useState(false);
   const { isFavorite, setIsFavorite,
     favorites, setFavorites } = useContext(RecipesAppContext);
+  const history = useHistory();
+  const { location: { pathname } } = history;
 
   useEffect(() => {
     const storeFav = JSON.parse(localStorage.getItem('favoriteRecipes'));
@@ -55,7 +58,7 @@ function InteractionBtns({ idDaReceita, newFav }) {
         onClick={ () => {
           const TIME = 3000;
           setToggleShare(true);
-          copy(`http://localhost:3000/drinks/${idDaReceita}`);
+          copy(`http://localhost:3000/${pathname.includes('meals') ? 'meals' : 'drinks'}/${idDaReceita}`);
           setTimeout(() => {
             setToggleShare(false);
           }, TIME);
