@@ -8,6 +8,7 @@ import '../style/RecipeInProgress.css';
 
 function RecipeDrinksInProgress() {
   const { idDaReceita } = useParams();
+  const [itsFinished, setItsFinished] = useState(true);
   const store = JSON.parse(localStorage.getItem('inProgressRecipes'));
   const recipeKey = store?.drinks[idDaReceita];
   const [isChecked, setIsChecked] = useState(recipeKey || []);
@@ -17,6 +18,7 @@ function RecipeDrinksInProgress() {
   const [recipeAlcoholic, setRecipeAlcoholic] = useState('');
   const [instructions, setInstructions] = useState('');
   const [ingredientAndMeasure, setIngredientAndMeasure] = useState([]);
+  const [tags, setTags] = useState();
   const { inProgressRecipes, setInProgressRecipes } = useContext(RecipesAppContext);
 
   useEffect(() => {
@@ -27,6 +29,13 @@ function RecipeDrinksInProgress() {
         [idDaReceita]: isChecked,
       },
     });
+    console.log(isChecked.length, ingredientAndMeasure.length);
+    if (isChecked.length === ingredientAndMeasure.length) {
+      console.log('ajudfjasdj');
+      setItsFinished(false);
+    } else {
+      setItsFinished(true);
+    }
   }, [isChecked]);
 
   const requestDetails = async () => {
@@ -43,11 +52,15 @@ function RecipeDrinksInProgress() {
     };
     setNewFav(result);
     const filtro = handleFilter(request, FIFTEEN);
+    if (isChecked.length === filtro.length) {
+      setItsFinished(false);
+    }
     setIngredientAndMeasure(filtro);
     setRecipePhoto(request[0].strDrinkThumb);
     setRecipeTitle(request[0].strDrink);
     setRecipeAlcoholic(request[0].strAlcoholic);
     setInstructions(request[0].strInstructions);
+    setTags(request[0].strTags);
   };
 
   useEffect(() => {
@@ -60,6 +73,15 @@ function RecipeDrinksInProgress() {
       return 'ingredient-step';
     }
     return '';
+  };
+
+  const finishRecipe = () => {
+    const recipe = newFav;
+    console.log(recipe);
+    console.log(ingredientAndMeasure.length);
+    const today = new Date();
+    const x = today.toLocaleDateString();
+    console.log(x);
   };
 
   return (
@@ -121,6 +143,9 @@ function RecipeDrinksInProgress() {
       <button
         data-testid="finish-recipe-btn"
         type="button"
+        className="finish-recipe-btn"
+        disabled={ itsFinished }
+        onClick={ finishRecipe }
       >
         Finalizar
       </button>

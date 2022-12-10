@@ -8,6 +8,7 @@ import '../style/RecipeInProgress.css';
 
 function RecipeMealsInProgress() {
   const { idDaReceita } = useParams();
+  const [itsFinished, setItsFinished] = useState(true);
   const store = JSON.parse(localStorage.getItem('inProgressRecipes'));
   const recipeKey = store?.meals[idDaReceita];
   const [isChecked, setIsChecked] = useState(recipeKey || []);
@@ -17,6 +18,7 @@ function RecipeMealsInProgress() {
   const [recipeCategory, setRecipeCategory] = useState('');
   const [instructions, setInstructions] = useState('');
   const [ingredientAndMeasure, setIngredientAndMeasure] = useState([]);
+  const [tags, setTags] = useState();
   const { inProgressRecipes, setInProgressRecipes } = useContext(RecipesAppContext);
 
   useEffect(() => {
@@ -27,6 +29,11 @@ function RecipeMealsInProgress() {
         [idDaReceita]: isChecked,
       },
     });
+    if (isChecked.length === ingredientAndMeasure.length) {
+      setItsFinished(false);
+    } else {
+      setItsFinished(true);
+    }
   }, [isChecked]);
 
   const requestDetails = async () => {
@@ -43,11 +50,15 @@ function RecipeMealsInProgress() {
     };
     setNewFav(result);
     const filtro = handleFilter(request, TWENTY);
+    if (isChecked.length === filtro.length) {
+      setItsFinished(false);
+    }
     setIngredientAndMeasure(filtro);
     setRecipePhoto(request[0].strMealThumb);
     setRecipeTitle(request[0].strMeal);
     setRecipeCategory(request[0].strCategory);
     setInstructions(request[0].strInstructions);
+    setTags(request[0].strTags);
   };
 
   useEffect(() => {
@@ -121,6 +132,8 @@ function RecipeMealsInProgress() {
       <button
         data-testid="finish-recipe-btn"
         type="button"
+        className="finish-recipe-btn"
+        disabled={ itsFinished }
       >
         Finalizar
       </button>
