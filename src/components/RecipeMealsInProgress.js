@@ -29,12 +29,10 @@ function RecipeMealsInProgress() {
         [idDaReceita]: isChecked,
       },
     });
-    console.log(isChecked.length, ingredientAndMeasure.length);
-    if (isChecked.length === ingredientAndMeasure.length) {
-      setItsFinished(false);
-    } else {
-      console.log('entrou');
+    if (isChecked.length !== ingredientAndMeasure.length) {
       setItsFinished(true);
+    } else {
+      setItsFinished(false);
     }
   }, [isChecked]);
 
@@ -52,8 +50,9 @@ function RecipeMealsInProgress() {
     };
     setNewFav(result);
     const filtro = handleFilter(request, TWENTY);
-    console.log(isChecked.length, filtro.length);
-    if (isChecked.length !== filtro.length) {
+    if (isChecked.length === filtro.length) {
+      setItsFinished(false);
+    } else {
       setItsFinished(true);
     }
     setIngredientAndMeasure(filtro);
