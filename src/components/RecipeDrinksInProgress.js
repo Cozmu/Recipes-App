@@ -29,9 +29,9 @@ function RecipeDrinksInProgress() {
         [idDaReceita]: isChecked,
       },
     });
-    console.log(isChecked.length, ingredientAndMeasure.length);
+    // console.log(isChecked.length, ingredientAndMeasure.length);
     if (isChecked.length === ingredientAndMeasure.length) {
-      console.log('ajudfjasdj');
+      // console.log('ajudfjasdj');
       setItsFinished(false);
     } else {
       setItsFinished(true);
@@ -52,8 +52,11 @@ function RecipeDrinksInProgress() {
     };
     setNewFav(result);
     const filtro = handleFilter(request, FIFTEEN);
-    if (isChecked.length === filtro.length) {
-      setItsFinished(false);
+    // console.log('função didmout');
+    console.log(isChecked.length, filtro.length);
+    if (isChecked.length !== filtro.length) {
+      // console.log('didimolt');
+      setItsFinished(true);
     }
     setIngredientAndMeasure(filtro);
     setRecipePhoto(request[0].strDrinkThumb);

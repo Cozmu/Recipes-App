@@ -8,7 +8,7 @@ import '../style/RecipeInProgress.css';
 
 function RecipeMealsInProgress() {
   const { idDaReceita } = useParams();
-  const [itsFinished, setItsFinished] = useState(true);
+  const [itsFinished, setItsFinished] = useState(false);
   const store = JSON.parse(localStorage.getItem('inProgressRecipes'));
   const recipeKey = store?.meals[idDaReceita];
   const [isChecked, setIsChecked] = useState(recipeKey || []);
@@ -29,9 +29,11 @@ function RecipeMealsInProgress() {
         [idDaReceita]: isChecked,
       },
     });
+    console.log(isChecked.length, ingredientAndMeasure.length);
     if (isChecked.length === ingredientAndMeasure.length) {
       setItsFinished(false);
     } else {
+      console.log('entrou');
       setItsFinished(true);
     }
   }, [isChecked]);
@@ -50,8 +52,9 @@ function RecipeMealsInProgress() {
     };
     setNewFav(result);
     const filtro = handleFilter(request, TWENTY);
-    if (isChecked.length === filtro.length) {
-      setItsFinished(false);
+    console.log(isChecked.length, filtro.length);
+    if (isChecked.length !== filtro.length) {
+      setItsFinished(true);
     }
     setIngredientAndMeasure(filtro);
     setRecipePhoto(request[0].strMealThumb);
