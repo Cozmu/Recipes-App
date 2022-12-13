@@ -1,13 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useContext } from 'react';
 import Header from '../components/Header';
+import RecipesAppContext from '../context/RecipesAppContext';
+import shareIcon from '../images/shareIcon.svg';
 
 function DoneRecipes() {
-  const [finishedRecipes, setFinishedRecipes] = useState([]);
-
-  useEffect(() => {
-    const store = JSON.parse(localStorage.getItem('doneRecipes'));
-    setFinishedRecipes(store);
-  }, []);
+  const { doneRecipes } = useContext(RecipesAppContext);
 
   return (
     <div>
@@ -32,7 +29,7 @@ function DoneRecipes() {
           Drinks
         </button>
       </section>
-      {finishedRecipes?.map((element, index) => (
+      {doneRecipes?.map((element, index) => (
         <section
           key={ index }
         >
@@ -46,7 +43,7 @@ function DoneRecipes() {
           <h4
             data-testid={ `${index}-horizontal-top-text` }
           >
-            {element.category}
+            {`${element.nationality} - ${element.category}`}
           </h4>
           <h1
             data-testid={ `${index}-horizontal-name` }
@@ -59,10 +56,13 @@ function DoneRecipes() {
             {element.doneDate}
           </h4>
           <button
-            data-testid={ `${index}-horizontal-share-btn` }
             type="button"
           >
-            Compartilhar
+            <img
+              data-testid={ `${index}-horizontal-share-btn` }
+              src={ shareIcon }
+              alt="Compartilhar"
+            />
           </button>
           {element.tags.length > 1
           && element?.tags.map((tagName, i) => (
