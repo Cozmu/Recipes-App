@@ -1,21 +1,39 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import copy from 'clipboard-copy';
 import Header from '../components/Header';
 import RecipesAppContext from '../context/RecipesAppContext';
 import shareIcon from '../images/shareIcon.svg';
 
 function DoneRecipes() {
-  const [toggleShare, setToggleShare] = useState(false);
+  const [recipes, setRecipes] = useState([]);
+  const [toggleShare, setToggleShare] = useState('');
   const { doneRecipes } = useContext(RecipesAppContext);
 
+  useEffect(() => {
+    setRecipes(doneRecipes);
+  }, []);
+
   const handleCopy = (elemento) => {
-    console.log(elemento.type === 'meal');
     const TIME = 3000;
-    setToggleShare(true);
+    setToggleShare(elemento.id);
     copy(`http://localhost:3000/${elemento.type === 'meal' ? 'meals' : 'drinks'}/${elemento.id}`);
     setTimeout(() => {
-      setToggleShare(false);
+      setToggleShare('');
     }, TIME);
+  };
+
+  const filterMeals = () => {
+    const newRecipes = doneRecipes.filter((e) => e.type === 'meal');
+    setRecipes(newRecipes);
+  };
+
+  const filterDrinks = () => {
+    const newRecipes = doneRecipes.filter((e) => e.type === 'drink');
+    setRecipes(newRecipes);
+  };
+
+  const allFilter = () => {
+    setRecipes(doneRecipes);
   };
 
   return (
@@ -25,23 +43,26 @@ function DoneRecipes() {
         <button
           data-testid="filter-by-all-btn"
           type="button"
+          onClick={ allFilter }
         >
           All
         </button>
         <button
           data-testid="filter-by-meal-btn"
           type="button"
+          onClick={ filterMeals }
         >
           Meals
         </button>
         <button
           data-testid="filter-by-drink-btn"
           type="button"
+          onClick={ filterDrinks }
         >
           Drinks
         </button>
       </section>
-      {doneRecipes?.map((element, index) => (
+      {recipes?.map((element, index) => (
         <section
           key={ index }
         >
@@ -76,7 +97,7 @@ function DoneRecipes() {
           >
             <img src={ shareIcon } alt="Compartilhar" />
           </button>
-          {toggleShare && <span>Link copied!</span>}
+          {toggleShare === element.id && <span>Link copied!</span>}
           {element.tags.length > 1
           && element?.tags.map((tagName, i) => (
             <div key={ i }>
