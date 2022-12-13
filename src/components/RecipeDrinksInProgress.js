@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { NavLink, useParams } from 'react-router-dom';
+import { NavLink, useParams, useHistory } from 'react-router-dom';
 import RecipesAppContext from '../context/RecipesAppContext';
 import requestRecipesFromAPI from '../services/requestRecipesFromAPI';
 import handleFilter from '../helpers/handleFilter';
@@ -7,6 +7,7 @@ import InteractionBtns from './InteractionBtns';
 import '../style/RecipeInProgress.css';
 
 function RecipeDrinksInProgress() {
+  const history = useHistory();
   const { idDaReceita } = useParams();
   const [itsFinished, setItsFinished] = useState(false);
   const store = JSON.parse(localStorage.getItem('inProgressRecipes'));
@@ -19,7 +20,12 @@ function RecipeDrinksInProgress() {
   const [instructions, setInstructions] = useState('');
   const [ingredientAndMeasure, setIngredientAndMeasure] = useState([]);
   const [tags, setTags] = useState();
-  const { inProgressRecipes, setInProgressRecipes } = useContext(RecipesAppContext);
+  const {
+    inProgressRecipes,
+    setInProgressRecipes,
+    setDoneRecipes,
+    doneRecipes,
+  } = useContext(RecipesAppContext);
 
   useEffect(() => {
     setInProgressRecipes({
@@ -77,11 +83,24 @@ function RecipeDrinksInProgress() {
 
   const finishRecipe = () => {
     const recipe = newFav;
-    console.log(recipe);
-    console.log(ingredientAndMeasure.length);
-    const today = new Date();
-    const x = today.toLocaleDateString();
-    console.log(x);
+    const today = new Date().toLocaleDateString();
+    let arrTags = [];
+    if (tags === null) {
+      arrTags = [];
+    } else {
+      arrTags = tags.split(',');
+    }
+    if (!doneRecipes.some((e) => e.id === recipe.id)) {
+      setDoneRecipes([
+        ...doneRecipes,
+        {
+          ...recipe,
+          doneDate: today,
+          tags: arrTags,
+        },
+      ]);
+    }
+    history.push('/done-recipes');
   };
 
   return (
