@@ -8,6 +8,7 @@ function Meals() {
   const [firstMeals, setFirstMeals] = useState([]);
   const [mealsCategorys, setMealsCategorys] = useState([]);
   const [filtersCollection, setFiltersCollection] = useState([]);
+  const [currentFilter, setCurrentFilter] = useState('');
   const TWELVE = 12;
   const FIVE = 5;
   const {
@@ -27,7 +28,7 @@ function Meals() {
 
   const filters = async (filterParam) => {
     setRecipes([]);
-    if (filtersCollection.length > 1) {
+    if (filterParam === currentFilter && filtersCollection.length > 1) {
       setFiltersCollection([]);
     } else if (filterParam === 'Beef') {
       const resultBeef = await requestRecipesFromAPI('https://www.themealdb.com/api/json/v1/1/filter.php?c=Beef');
@@ -37,6 +38,7 @@ function Meals() {
       const result = await requestRecipesFromAPI(endPoint);
       setFiltersCollection(result);
     }
+    setCurrentFilter(filterParam);
   };
 
   useEffect(() => {

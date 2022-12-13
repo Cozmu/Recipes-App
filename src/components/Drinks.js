@@ -8,6 +8,7 @@ function Drinks() {
   const [firstDrinks, setFirstDrinks] = useState([]);
   const [drinksCategorys, setDrinksCategorys] = useState([]);
   const [filtersCollection, setFiltersCollection] = useState([]);
+  const [currentFilter, setCurrentFilter] = useState('');
   const TWELVE = 12;
   const FIVE = 5;
   const {
@@ -27,7 +28,7 @@ function Drinks() {
 
   const filters = async (filterParam) => {
     setRecipes([]);
-    if (filtersCollection.length > 1) {
+    if (filterParam === currentFilter && filtersCollection.length > 1) {
       setFiltersCollection([]);
     } else if (filterParam === 'Cocktail') {
       const resultCocktail = await requestRecipesFromAPI('https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=Cocktail');
@@ -37,6 +38,7 @@ function Drinks() {
       const result = await requestRecipesFromAPI(endPoint);
       setFiltersCollection(result);
     }
+    setCurrentFilter(filterParam);
   };
 
   useEffect(() => {

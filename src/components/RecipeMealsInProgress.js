@@ -83,7 +83,7 @@ function RecipeMealsInProgress() {
 
   const finishRecipe = () => {
     const recipe = newFav;
-    const today = new Date().toLocaleDateString();
+    const today = new Date().toISOString();
     let arrTags = [];
     if (tags === null) {
       arrTags = [];

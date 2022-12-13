@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
-import teste from '../img/picwish.png';
+import teste from '../images/picwish.png';
 // import { useHistory } from 'react-router-dom';
 
 function Login({ history }) {
