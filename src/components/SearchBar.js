@@ -28,7 +28,7 @@ function SearchBar() {
   const sendDrinks = async () => {
     let url = '';
     if (category === 'Ingredient') {
-      url = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${searchFor}`; // quebra em erro de busca
+      url = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${searchFor}`;
     } else if (category === 'Name') {
       url = `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${searchFor}`;
     } else if (category === firstLetter) {
@@ -39,7 +39,7 @@ function SearchBar() {
       }
     }
     const result = await requestRecipesFromAPI(url);
-    if (result.length === 0) {
+    if (result?.length === 0) {
       global.alert('Sorry, we haven\'t found any recipes for these filters.');
     }
     setRecipes(result);
@@ -61,7 +61,7 @@ function SearchBar() {
       }
     }
     const result = await requestRecipesFromAPI(url);
-    if (result.length === 0) {
+    if (result?.length === 0) {
       global.alert('Sorry, we haven\'t found any recipes for these filters.');
     }
     setRecipes(result);
