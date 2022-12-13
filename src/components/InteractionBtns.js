@@ -7,7 +7,7 @@ import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 
-function InteractionBtns({ idDaReceita, newFav }) {
+function InteractionBtns({ idDaReceita, newFav, dataTestid }) {
   const [toggleShare, setToggleShare] = useState(false);
   const { isFavorite, setIsFavorite,
     favorites, setFavorites } = useContext(RecipesAppContext);
@@ -47,25 +47,27 @@ function InteractionBtns({ idDaReceita, newFav }) {
         onClick={ () => toggleFavorite() }
       >
         <img
-          data-testid="favorite-btn"
+          data-testid={ dataTestid }
           src={ isFavorite }
           alt="Favorite"
         />
       </button>
-      <button
-        type="button"
-        data-testid="share-btn"
-        onClick={ () => {
-          const TIME = 3000;
-          setToggleShare(true);
-          copy(`http://localhost:3000/${pathname.includes('meals') ? 'meals' : 'drinks'}/${idDaReceita}`);
-          setTimeout(() => {
-            setToggleShare(false);
-          }, TIME);
-        } }
-      >
-        <img src={ shareIcon } alt="Compartilhar" />
-      </button>
+      {pathname !== '/favorite-recipes'
+       && (
+         <button
+           type="button"
+           data-testid="share-btn"
+           onClick={ () => {
+             const TIME = 3000;
+             setToggleShare(true);
+             copy(`http://localhost:3000/${pathname.includes('meals') ? 'meals' : 'drinks'}/${idDaReceita}`);
+             setTimeout(() => {
+               setToggleShare(false);
+             }, TIME);
+           } }
+         >
+           <img src={ shareIcon } alt="Compartilhar" />
+         </button>)}
       {toggleShare && <span>Link copied!</span>}
 
     </section>
