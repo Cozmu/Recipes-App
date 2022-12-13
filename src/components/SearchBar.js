@@ -39,7 +39,7 @@ function SearchBar() {
       }
     }
     const result = await requestRecipesFromAPI(url);
-    if (result.length === 0) {
+    if (result?.length === 0) {
       global.alert('Sorry, we haven\'t found any recipes for these filters.');
     }
     setRecipes(result);
@@ -61,7 +61,7 @@ function SearchBar() {
       }
     }
     const result = await requestRecipesFromAPI(url);
-    if (result.length === 0) {
+    if (result?.length === 0) {
       global.alert('Sorry, we haven\'t found any recipes for these filters.');
     }
     setRecipes(result);
