@@ -1,10 +1,22 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
+import copy from 'clipboard-copy';
 import Header from '../components/Header';
 import RecipesAppContext from '../context/RecipesAppContext';
 import shareIcon from '../images/shareIcon.svg';
 
 function DoneRecipes() {
+  const [toggleShare, setToggleShare] = useState(false);
   const { doneRecipes } = useContext(RecipesAppContext);
+
+  const handleCopy = (elemento) => {
+    console.log(elemento.type === 'meal');
+    const TIME = 3000;
+    setToggleShare(true);
+    copy(`http://localhost:3000/${elemento.type === 'meal' ? 'meals' : 'drinks'}/${elemento.id}`);
+    setTimeout(() => {
+      setToggleShare(false);
+    }, TIME);
+  };
 
   return (
     <div>
@@ -59,13 +71,12 @@ function DoneRecipes() {
           </h4>
           <button
             type="button"
+            data-testid={ `${index}-horizontal-share-btn` }
+            onClick={ () => handleCopy(element) }
           >
-            <img
-              data-testid={ `${index}-horizontal-share-btn` }
-              src={ shareIcon }
-              alt="Compartilhar"
-            />
+            <img src={ shareIcon } alt="Compartilhar" />
           </button>
+          {toggleShare && <span>Link copied!</span>}
           {element.tags.length > 1
           && element?.tags.map((tagName, i) => (
             <div key={ i }>
