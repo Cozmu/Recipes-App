@@ -83,14 +83,14 @@ function RecipeDrinksInProgress() {
 
   const finishRecipe = () => {
     const recipe = newFav;
-    const today = new Date().toLocaleDateString();
+    const today = new Date().toISOString();
     let arrTags = [];
     if (tags === null) {
       arrTags = [];
     } else {
       arrTags = tags.split(',');
     }
-    if (!doneRecipes.some((e) => e.id === recipe.id)) {
+    if (!doneRecipes?.some((e) => e.id === recipe.id)) {
       setDoneRecipes([
         ...doneRecipes,
         {
