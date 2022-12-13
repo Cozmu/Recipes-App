@@ -95,6 +95,7 @@ function DetailsDrinks() {
       <InteractionBtns
         newFav={ newFav }
         idDaReceita={ idDaReceita }
+        dataTestid="favorite-btn"
       />
       <ul>
         {ingredientAndMeasure.map((e, i) => (

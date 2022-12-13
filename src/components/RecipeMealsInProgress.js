@@ -129,6 +129,7 @@ function RecipeMealsInProgress() {
       <InteractionBtns
         idDaReceita={ idDaReceita }
         newFav={ newFav }
+        dataTestid="favorite-btn"
       />
       <p
         data-testid="instructions"
