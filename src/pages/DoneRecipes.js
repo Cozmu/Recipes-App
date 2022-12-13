@@ -1,4 +1,5 @@
 import { useContext, useState, useEffect } from 'react';
+import { NavLink } from 'react-router-dom';
 import copy from 'clipboard-copy';
 import Header from '../components/Header';
 import RecipesAppContext from '../context/RecipesAppContext';
@@ -66,13 +67,17 @@ function DoneRecipes() {
         <section
           key={ index }
         >
-          <img
-            data-testid={ `${index}-horizontal-image` }
-            width="250px"
-            src={ element.image }
-            alt={ element.id }
-            id={ element.tags[0] }
-          />
+          <NavLink
+            to={ `${element.type === 'meal' ? 'meals' : 'drinks'}/${element.id}` }
+          >
+            <img
+              data-testid={ `${index}-horizontal-image` }
+              width="250px"
+              src={ element.image }
+              alt={ element.id }
+              id={ element.tags[0] }
+            />
+          </NavLink>
           <h4
             data-testid={ `${index}-horizontal-top-text` }
           >
@@ -80,11 +85,15 @@ function DoneRecipes() {
               ? `${element.alcoholicOrNot}`
               : `${element.nationality} - ${element.category}`}
           </h4>
-          <h1
-            data-testid={ `${index}-horizontal-name` }
+          <NavLink
+            to={ `${element.type === 'meal' ? 'meals' : 'drinks'}/${element.id}` }
           >
-            {element.name}
-          </h1>
+            <h1
+              data-testid={ `${index}-horizontal-name` }
+            >
+              {element.name}
+            </h1>
+          </NavLink>
           <h4
             data-testid={ `${index}-horizontal-done-date` }
           >
@@ -92,10 +101,13 @@ function DoneRecipes() {
           </h4>
           <button
             type="button"
-            data-testid={ `${index}-horizontal-share-btn` }
             onClick={ () => handleCopy(element) }
           >
-            <img src={ shareIcon } alt="Compartilhar" />
+            <img
+              data-testid={ `${index}-horizontal-share-btn` }
+              src={ shareIcon }
+              alt="Compartilhar"
+            />
           </button>
           {toggleShare === element.id && <span>Link copied!</span>}
           {element.tags.length > 1
