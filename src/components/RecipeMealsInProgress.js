@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { NavLink, useParams } from 'react-router-dom';
+import { NavLink, useParams, useHistory } from 'react-router-dom';
 import RecipesAppContext from '../context/RecipesAppContext';
 import requestRecipesFromAPI from '../services/requestRecipesFromAPI';
 import handleFilter from '../helpers/handleFilter';
@@ -8,6 +8,7 @@ import '../style/RecipeInProgress.css';
 
 function RecipeMealsInProgress() {
   const { idDaReceita } = useParams();
+  const history = useHistory();
   const [itsFinished, setItsFinished] = useState(false);
   const store = JSON.parse(localStorage.getItem('inProgressRecipes'));
   const recipeKey = store?.meals[idDaReceita];
@@ -19,7 +20,12 @@ function RecipeMealsInProgress() {
   const [instructions, setInstructions] = useState('');
   const [ingredientAndMeasure, setIngredientAndMeasure] = useState([]);
   const [tags, setTags] = useState();
-  const { inProgressRecipes, setInProgressRecipes } = useContext(RecipesAppContext);
+  const {
+    inProgressRecipes,
+    setInProgressRecipes,
+    setDoneRecipes,
+    doneRecipes,
+  } = useContext(RecipesAppContext);
 
   useEffect(() => {
     setInProgressRecipes({
@@ -29,12 +35,10 @@ function RecipeMealsInProgress() {
         [idDaReceita]: isChecked,
       },
     });
-    console.log(isChecked.length, ingredientAndMeasure.length);
-    if (isChecked.length === ingredientAndMeasure.length) {
-      setItsFinished(false);
-    } else {
-      console.log('entrou');
+    if (isChecked.length !== ingredientAndMeasure.length) {
       setItsFinished(true);
+    } else {
+      setItsFinished(false);
     }
   }, [isChecked]);
 
@@ -52,8 +56,9 @@ function RecipeMealsInProgress() {
     };
     setNewFav(result);
     const filtro = handleFilter(request, TWENTY);
-    console.log(isChecked.length, filtro.length);
-    if (isChecked.length !== filtro.length) {
+    if (isChecked.length === filtro.length) {
+      setItsFinished(false);
+    } else {
       setItsFinished(true);
     }
     setIngredientAndMeasure(filtro);
@@ -74,6 +79,28 @@ function RecipeMealsInProgress() {
       return 'ingredient-step';
     }
     return '';
+  };
+
+  const finishRecipe = () => {
+    const recipe = newFav;
+    const today = new Date().toLocaleDateString();
+    let arrTags = [];
+    if (tags === null) {
+      arrTags = [];
+    } else {
+      arrTags = tags.split(',');
+    }
+    if (!doneRecipes.some((e) => e.id === recipe.id)) {
+      setDoneRecipes([
+        ...doneRecipes,
+        {
+          ...recipe,
+          doneDate: today,
+          tags: arrTags,
+        },
+      ]);
+    }
+    history.push('/done-recipes');
   };
 
   return (
@@ -137,6 +164,7 @@ function RecipeMealsInProgress() {
         type="button"
         className="finish-recipe-btn"
         disabled={ itsFinished }
+        onClick={ finishRecipe }
       >
         Finalizar
       </button>
