@@ -43,7 +43,9 @@ function DoneRecipes() {
           <h4
             data-testid={ `${index}-horizontal-top-text` }
           >
-            {`${element.nationality} - ${element.category}`}
+            {element.type === 'drink'
+              ? `${element.alcoholicOrNot}`
+              : `${element.nationality} - ${element.category}`}
           </h4>
           <h1
             data-testid={ `${index}-horizontal-name` }
