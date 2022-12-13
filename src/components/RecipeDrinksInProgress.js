@@ -139,12 +139,12 @@ function RecipeDrinksInProgress() {
       {ingredientAndMeasure.map((e, index) => (
         <label
           data-testid={ `${index}-ingredient-step` }
-          htmlFor="ingredient-step"
+          htmlFor={ index }
           className={ itsChecked(e) }
           key={ index }
         >
           <input
-            id="ingredient-step"
+            id={ index }
             type="checkbox"
             value={ e }
             onChange={ ({ target }) => {

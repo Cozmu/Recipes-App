@@ -38,6 +38,17 @@ function SpecialRecipes({ localRecipe }) {
     setRecipes(localRecipe);
   };
 
+  if (localRecipe.length === 0) {
+    return (
+      <div>
+        <h1>
+          { pathname === '/favorite-recipes' ? 'Não há receitas favoritadas'
+            : 'Não há receitas finalizafas' }
+        </h1>
+      </div>
+    );
+  }
+
   return (
     <div>
       <NavLink
