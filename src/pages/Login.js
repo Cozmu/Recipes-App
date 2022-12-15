@@ -56,7 +56,7 @@ function Login({ history }) {
             className="inputs-login"
             data-testid="password-input"
             id="passwordInput"
-            placeholder="Senha"
+            placeholder="Password"
             type="password"
             onChange={ ({ target }) => {
               setPassword(target.value);

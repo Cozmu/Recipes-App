@@ -19,7 +19,7 @@ function InteractionBtns({ idDaReceita, newFav, dataTestid }) {
   useEffect(() => {
     const storeFav = JSON.parse(localStorage.getItem('favoriteRecipes'));
     if (storeFav?.some((e) => e.id === idDaReceita)) {
-      setIsFavorite(<RiHeartFill className="filled-heart-icon" />);
+      setIsFavorite(<RiHeartFill className="filled-heart-icon" />); // coraçao preenchido
     } else {
       setIsFavorite(<RiHeartLine className="empty-heart-icon" />);
     }
@@ -27,7 +27,7 @@ function InteractionBtns({ idDaReceita, newFav, dataTestid }) {
 
   useEffect(() => {
     if (favorites?.some((e) => e.id === idDaReceita)) {
-      setIsFavorite(<RiHeartFill className="filled-heart-icon" />);
+      setIsFavorite(<RiHeartFill className="filled-heart-icon" />); // coraçao preenchido
     } else {
       setIsFavorite(<RiHeartLine className="empty-heart-icon" />);
     }

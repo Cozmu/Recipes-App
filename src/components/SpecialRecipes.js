@@ -1,9 +1,11 @@
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import { NavLink, useHistory } from 'react-router-dom';
+// import { IoChevronBackCircleSharp } from 'react-icons/io5';
 import copy from 'clipboard-copy';
 import shareIcon from '../images/shareIcon.svg';
 import InteractionBtns from './InteractionBtns';
+import '../style/SpecialRecipes.css';
 
 function SpecialRecipes({ localRecipe }) {
   const [recipes, setRecipes] = useState([]);
@@ -40,23 +42,23 @@ function SpecialRecipes({ localRecipe }) {
 
   if (localRecipe.length === 0) {
     return (
-      <div>
-        <h1>
-          { pathname === '/favorite-recipes' ? 'Não há receitas favoritadas'
-            : 'Não há receitas finalizafas' }
-        </h1>
+      <div className="not-recipes-container">
+        <p>
+          { pathname === '/favorite-recipes' ? 'There are no favorite recipes'
+            : 'There are no finished recipes' }
+        </p>
       </div>
     );
   }
 
   return (
     <div>
-      <NavLink
+      {/* <NavLink
         to="/meals"
       >
-        Voltar
-      </NavLink>
-      <section>
+        <IoChevronBackCircleSharp />
+      </NavLink> */}
+      <section className="button-filters-container">
         <button
           data-testid="filter-by-all-btn"
           type="button"
@@ -79,61 +81,68 @@ function SpecialRecipes({ localRecipe }) {
           Drinks
         </button>
       </section>
-      {recipes?.map((element, index) => (
-        <section
-          key={ index }
-        >
-          <NavLink
-            to={ `${element.type === 'meal' ? 'meals' : 'drinks'}/${element.id}` }
+      <div className="favorites-recipes-container">
+        {recipes?.map((element, index) => (
+          <section
+            key={ index }
+            className="favorites-recipes"
           >
-            <img
-              data-testid={ `${index}-horizontal-image` }
-              width="250px"
-              src={ element.image }
-              alt={ element.id }
-            />
-          </NavLink>
-          <h4
-            data-testid={ `${index}-horizontal-top-text` }
-          >
-            {element.type === 'drink'
-              ? `${element.alcoholicOrNot}`
-              : `${element.nationality} - ${element.category}`}
-          </h4>
-          <NavLink
-            to={ `${element.type === 'meal' ? 'meals' : 'drinks'}/${element.id}` }
-          >
-            <h1
-              data-testid={ `${index}-horizontal-name` }
+            <NavLink
+              to={ `${element.type === 'meal' ? 'meals' : 'drinks'}/${element.id}` }
             >
-              {element.name}
-            </h1>
-          </NavLink>
-          <h4
-            data-testid={ `${index}-horizontal-done-date` }
-          >
-            {element.doneDate}
-          </h4>
-          <button
-            type="button"
-            onClick={ () => handleCopy(element) }
-          >
-            <img
-              data-testid={ `${index}-horizontal-share-btn` }
-              src={ shareIcon }
-              alt="Compartilhar"
-            />
-          </button>
-          {toggleShare === element.id && <span>Link copied!</span>}
+              <img
+                className="horizontal-image"
+                data-testid={ `${index}-horizontal-image` }
+                src={ element.image }
+                alt={ element.id }
+              />
+            </NavLink>
 
-          { pathname === '/favorite-recipes'
+            <div className="information-favorites">
+              <h4
+                data-testid={ `${index}-horizontal-top-text` }
+              >
+                {element.type === 'drink'
+                  ? `${element.alcoholicOrNot}`
+                  : `${element.nationality} - ${element.category}`}
+              </h4>
+              <NavLink
+                to={ `${element.type === 'meal' ? 'meals' : 'drinks'}/${element.id}` }
+                className="link-special-recipes"
+              >
+                <h1
+                  data-testid={ `${index}-horizontal-name` }
+                >
+                  {element.name}
+                </h1>
+              </NavLink>
+              <h4
+                data-testid={ `${index}-horizontal-done-date` }
+              >
+                {element.doneDate}
+              </h4>
+              <section className="buttons-favorites">
+                <button
+                  type="button"
+                  onClick={ () => handleCopy(element) }
+                >
+                  <img
+                    data-testid={ `${index}-horizontal-share-btn` }
+                    src={ shareIcon }
+                    alt="Compartilhar"
+                  />
+                </button>
+
+                { pathname === '/favorite-recipes'
           && <InteractionBtns
             idDaReceita={ element.id }
             newFav={ element }
             dataTestid={ `${index}-horizontal-favorite-btn` }
           />}
+              </section>
+              {toggleShare === element.id && <span>Link copied!</span>}
 
-          {element?.tags
+              {element?.tags
           && element?.tags.map((tagName, i) => (
             <div key={ i }>
               <p
@@ -143,8 +152,10 @@ function SpecialRecipes({ localRecipe }) {
               </p>
             </div>
           ))}
-        </section>
-      ))}
+            </div>
+          </section>
+        ))}
+      </div>
     </div>
   );
 }

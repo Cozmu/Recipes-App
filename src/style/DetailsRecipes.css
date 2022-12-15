@@ -34,6 +34,26 @@
     padding: 10px;
   }
 
+  .instructions-container-in-progress {
+    margin-bottom: 70px;
+  }
+
+  .instructions-container-in-progress p {
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px
+      , rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+    margin: auto;
+    padding: 10px;
+    width: 90%;
+  }
+
+  .instructions-container-in-progress h1 {
+    margin: auto;
+    padding: 10px;
+    text-align: start;
+    width: 90%;
+  }
+
   .instructions-container {
     margin-bottom: 20px;
   }
@@ -52,6 +72,32 @@
     padding: 10px;
     text-align: start;
     width: 90%;
+  }
+
+  .ingredients-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ingredients-container .ingredientes-checked {
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px
+      , rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    margin: auto;
+    margin-bottom: 40px;
+    padding: 10px;
+    width: 90%;
+  }
+
+  .ingredients-container .checked {
+    margin-right: 10px;
+  }
+
+  .ingredient-step {
+    text-decoration: line-through solid black;
   }
 
   .ingredients-container h1 {
@@ -120,6 +166,20 @@
     border-radius: 5px;
     bottom: 0;
     color: white;
+    font-size: large;
+    height: 40px;
+    margin-left: 5%;
+    margin-right: 5%;
+    position: fixed;
+    width: 90%;
+  }
+
+  .start-recipe-btn:disabled {
+    background-color: rgb(141, 140, 140);
+    border: none;
+    border-radius: 5px;
+    bottom: 0;
+    color: rgb(87, 86, 86);
     font-size: large;
     height: 40px;
     margin-left: 5%;

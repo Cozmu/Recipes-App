@@ -1,10 +1,11 @@
 import { useState, useEffect, useContext } from 'react';
 import { NavLink, useParams, useHistory } from 'react-router-dom';
+import { IoChevronBackCircleSharp } from 'react-icons/io5';
 import RecipesAppContext from '../context/RecipesAppContext';
 import requestRecipesFromAPI from '../services/requestRecipesFromAPI';
 import handleFilter from '../helpers/handleFilter';
 import InteractionBtns from './InteractionBtns';
-import '../style/RecipeInProgress.css';
+import '../style/DetailsRecipes.css';
 
 function RecipeMealsInProgress() {
   const { idDaReceita } = useParams();
@@ -83,7 +84,7 @@ function RecipeMealsInProgress() {
 
   const finishRecipe = () => {
     const recipe = newFav;
-    const today = new Date().toISOString(); // mudar formato para aprensetar .toLocaleDateString()
+    const today = new Date().toLocaleDateString(); // mudar formato para aprensetar .toLocaleDateString() || toISOString()
     let arrTags = [];
     if (tags === null) {
       arrTags = [];
@@ -105,65 +106,81 @@ function RecipeMealsInProgress() {
 
   return (
     <div>
-      <NavLink
-        to={ `/meals/${idDaReceita}` }
-      >
-        Voltar
-      </NavLink>
-      <img
-        width="250"
-        data-testid="recipe-photo"
-        src={ recipePhoto }
-        alt={ idDaReceita }
-      />
-      <h1
-        data-testid="recipe-title"
-      >
-        {recipeTitle}
-      </h1>
-      <h4
-        data-testid="recipe-category"
-      >
-        {recipeCategory}
-      </h4>
-      <InteractionBtns
-        idDaReceita={ idDaReceita }
-        newFav={ newFav }
-        dataTestid="favorite-btn"
-      />
-      <p
-        data-testid="instructions"
-      >
-        {instructions}
-      </p>
-      {ingredientAndMeasure.map((e, index) => (
-        <label
-          data-testid={ `${index}-ingredient-step` }
-          htmlFor={ e }
-          key={ index }
-          className={ itsChecked(e) }
+      <section className="recipe-photo-container">
+        <NavLink
+          to={ `/meals/${idDaReceita}` }
+          className="back-icon"
         >
-          <input
-            id={ e }
-            type="checkbox"
-            value={ e }
-            onChange={ ({ target }) => {
-              if (isChecked.some((ingredient) => ingredient === target.value)) {
-                const newChecked = isChecked.filter((el) => el !== target.value);
-                setIsChecked(newChecked);
-              } else {
-                setIsChecked([...isChecked, target.value]);
-              }
-            } }
-            checked={ isChecked.includes(e) }
-          />
-          {e}
-        </label>
-      ))}
+          <IoChevronBackCircleSharp />
+        </NavLink>
+        <img
+          className="recipe-photo"
+          data-testid="recipe-photo"
+          src={ recipePhoto }
+          alt={ idDaReceita }
+        />
+      </section>
+      <section className="titles-and-btns-container">
+        <div>
+          <h1
+            data-testid="recipe-title"
+          >
+            {recipeTitle}
+          </h1>
+          <h4
+            data-testid="recipe-category"
+          >
+            {recipeCategory}
+          </h4>
+        </div>
+        <InteractionBtns
+          idDaReceita={ idDaReceita }
+          newFav={ newFav }
+          dataTestid="favorite-btn"
+        />
+      </section>
+      <section className="ingredients-container">
+        <h1>Ingredients</h1>
+        <div className="ingredientes-checked">
+          {ingredientAndMeasure.map((e, index) => (
+            <label
+              data-testid={ `${index}-ingredient-step` }
+              htmlFor={ e }
+              key={ index }
+              className={ itsChecked(e) }
+            >
+              <input
+                id={ e }
+                className="checked"
+                type="checkbox"
+                value={ e }
+                onChange={ ({ target }) => {
+                  if (isChecked.some((ingredient) => ingredient === target.value)) {
+                    const newChecked = isChecked.filter((el) => el !== target.value);
+                    setIsChecked(newChecked);
+                  } else {
+                    setIsChecked([...isChecked, target.value]);
+                  }
+                } }
+                checked={ isChecked.includes(e) }
+              />
+              {e}
+            </label>
+          ))}
+        </div>
+      </section>
+      <section className="instructions-container-in-progress">
+        <h1>Intructions</h1>
+        <p
+          data-testid="instructions"
+        >
+          {instructions}
+        </p>
+      </section>
       <button
+        className="start-recipe-btn"
         data-testid="finish-recipe-btn"
         type="button"
-        className="finish-recipe-btn"
         disabled={ itsFinished }
         onClick={ finishRecipe }
       >

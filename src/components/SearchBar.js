@@ -164,7 +164,7 @@ function SearchBar() {
                 id="searchInput"
                 type="text"
                 name="searchText"
-                placeholder="Nos fale sua receita favorita !"
+                placeholder="Tell us your favorite recipe !"
                 onChange={ ({ target }) => setSearchFor(target.value) }
                 value={ searchFor }
               />
