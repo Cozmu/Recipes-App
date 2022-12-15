@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
-// import { Link } from 'react-router-dom';
+import { BiDrink } from 'react-icons/bi';
+import { GiMeal } from 'react-icons/gi';
 import drinkIcon from '../images/drinkIcon.svg';
 import mealIcon from '../images/mealIcon.svg';
 import '../style/Footer.css';
@@ -22,19 +23,21 @@ function Footer() {
     <footer className="footer" data-testid="footer">
       <button
         data-testid="drinks-bottom-btn"
+        className="bottom-btn"
         type="button"
         onClick={ btnDrinks }
         src={ drinkIcon }
       >
-        <img src={ drinkIcon } alt="Icon Drinks" />
+        <BiDrink className="bottom-icon" />
       </button>
       <button
         data-testid="meals-bottom-btn"
+        className="bottom-btn"
         type="button"
         onClick={ btnMeals }
         src={ mealIcon }
       >
-        <img src={ mealIcon } alt="Icon Meals" />
+        <GiMeal className="bottom-icon" />
       </button>
     </footer>
   );
