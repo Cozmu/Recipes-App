@@ -61,12 +61,33 @@
   .buttons-favorites {
     display: flex;
     justify-content: space-evenly;
+    position: relative;
+  }
+
+  .buttons-favorites .share-button {
+    left: 0;
+    position: absolute;
   }
 
   .buttons-favorites button {
     background-color: rgba(255, 255, 255, 0);
     border: none;
     margin-right: 10px;
+  }
+
+  .span {
+    margin-top: 105px;
+    position: absolute;
+  }
+
+  .favorite-recipe {
+    margin-left: 60px;
+    position: absolute;
+  }
+
+  .tag-name-container {
+    margin-top: 130px;
+    position: absolute;
   }
 
   .not-recipes-container {

@@ -18,17 +18,26 @@ function InteractionBtns({ idDaReceita, newFav, dataTestid }) {
 
   useEffect(() => {
     const storeFav = JSON.parse(localStorage.getItem('favoriteRecipes'));
+    // console.log('didimout', storeFav?.some((e) => e.id === idDaReceita));
+
     if (storeFav?.some((e) => e.id === idDaReceita)) {
+      // console.log('didimout-preto');
       setIsFavorite(<RiHeartFill className="filled-heart-icon" />); // coraçao preenchido
     } else {
+      // console.log('didimout-branco');
       setIsFavorite(<RiHeartLine className="empty-heart-icon" />);
     }
   }, []);
 
   useEffect(() => {
+    // console.log('entrou', favorites?.some((e) => e.id === idDaReceita));
+    // console.log(idDaReceita);
+    //  favorites.some((e) => // console.log(e.id));
     if (favorites?.some((e) => e.id === idDaReceita)) {
+      // console.log('preto');
       setIsFavorite(<RiHeartFill className="filled-heart-icon" />); // coraçao preenchido
     } else {
+      // console.log('branco');
       setIsFavorite(<RiHeartLine className="empty-heart-icon" />);
     }
   }, [favorites]);
@@ -41,6 +50,42 @@ function InteractionBtns({ idDaReceita, newFav, dataTestid }) {
       setFavorites([...favorites, newFav]);
     }
   };
+
+  // const favoriteConditional = () => {
+  //   if (pathname === '/favorite-recipes') {
+  //     // console.log(favorites.some((e) => e.id === idDaReceita));
+  //     return (
+  //       <button
+  //         type="button"
+  //         className="interaction-btns"
+  //         onClick={ () => toggleFavorite() }
+  //       >
+  //         <img
+  //           data-testid={ dataTestid }
+  //           className="favorite-icon"
+  //           src={ isFavorite }
+  //           alt="Favorite"
+  //         />
+  //         { favorites.some((e) => e.id === idDaReceita) && isFavorite}
+  //       </button>
+  //     );
+  //   }
+  //   return (
+  //     <button
+  //       type="button"
+  //       className="interaction-btns"
+  //       onClick={ () => toggleFavorite() }
+  //     >
+  //       <img
+  //         data-testid={ dataTestid }
+  //         className="favorite-icon"
+  //         src={ isFavorite }
+  //         alt="Favorite"
+  //       />
+  //       {isFavorite}
+  //     </button>
+  //   );
+  // };
 
   return (
     <section className="interaction-btns-container">
@@ -57,6 +102,7 @@ function InteractionBtns({ idDaReceita, newFav, dataTestid }) {
         />
         {isFavorite}
       </button>
+      {/* {favoriteConditional()} */}
       {pathname !== '/favorite-recipes'
        && (
          <button

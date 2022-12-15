@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import { NavLink, useHistory } from 'react-router-dom';
-// import { IoChevronBackCircleSharp } from 'react-icons/io5';
 import copy from 'clipboard-copy';
 import shareIcon from '../images/shareIcon.svg';
 import InteractionBtns from './InteractionBtns';
@@ -53,11 +52,6 @@ function SpecialRecipes({ localRecipe }) {
 
   return (
     <div>
-      {/* <NavLink
-        to="/meals"
-      >
-        <IoChevronBackCircleSharp />
-      </NavLink> */}
       <section className="button-filters-container">
         <button
           data-testid="filter-by-all-btn"
@@ -124,6 +118,7 @@ function SpecialRecipes({ localRecipe }) {
               <section className="buttons-favorites">
                 <button
                   type="button"
+                  className="share-button"
                   onClick={ () => handleCopy(element) }
                 >
                   <img
@@ -132,26 +127,30 @@ function SpecialRecipes({ localRecipe }) {
                     alt="Compartilhar"
                   />
                 </button>
-
-                { pathname === '/favorite-recipes'
-          && <InteractionBtns
-            idDaReceita={ element.id }
-            newFav={ element }
-            dataTestid={ `${index}-horizontal-favorite-btn` }
-          />}
+                <div className="favorite-recipe">
+                  { pathname === '/favorite-recipes'
+                && <InteractionBtns
+                  idDaReceita={ element.id }
+                  newFav={ element }
+                  dataTestid={ `${index}-horizontal-favorite-btn` }
+                />}
+                </div>
               </section>
-              {toggleShare === element.id && <span>Link copied!</span>}
+              {toggleShare === element.id && <span className="span">Link copied!</span>}
 
               {element?.tags
-          && element?.tags.map((tagName, i) => (
-            <div key={ i }>
-              <p
-                data-testid={ `${index}-${tagName}-horizontal-tag` }
-              >
-                {tagName}
-              </p>
-            </div>
-          ))}
+                && element?.tags.map((tagName, i) => (
+                  <div
+                    className="tag-name-container"
+                    key={ i }
+                  >
+                    <p
+                      data-testid={ `${index}-${tagName}-horizontal-tag` }
+                    >
+                      {tagName}
+                    </p>
+                  </div>
+                ))}
             </div>
           </section>
         ))}
