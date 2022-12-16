@@ -133,11 +133,13 @@ function RecipeMealsInProgress() {
             {recipeCategory}
           </h4>
         </div>
-        <InteractionBtns
-          idDaReceita={ idDaReceita }
-          newFav={ newFav }
-          dataTestid="favorite-btn"
-        />
+        <div className="buttons-container">
+          <InteractionBtns
+            idDaReceita={ idDaReceita }
+            newFav={ newFav }
+            dataTestid="favorite-btn"
+          />
+        </div>
       </section>
       <section className="ingredients-container">
         <h1>Ingredients</h1>

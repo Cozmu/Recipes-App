@@ -99,11 +99,13 @@ function DetailsDrinks() {
             {recipeAlcoholic}
           </h3>
         </div>
-        <InteractionBtns
-          newFav={ newFav }
-          idDaReceita={ idDaReceita }
-          dataTestid="favorite-btn"
-        />
+        <div className="buttons-container">
+          <InteractionBtns
+            newFav={ newFav }
+            idDaReceita={ idDaReceita }
+            dataTestid="favorite-btn"
+          />
+        </div>
       </section>
       <section className="ingredients-container">
         <h1>Ingredients</h1>

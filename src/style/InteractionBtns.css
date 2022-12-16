@@ -1,11 +1,6 @@
 @media only screen and ( min-width : 320px ) and ( max-device-width : 425px ) {
 
   .interaction-btns-container {
-    align-items: center;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    height: 35px;
     position: relative;
     width: 90px;
   }
@@ -15,10 +10,24 @@
     top: 30px;
   }
 
+  .interaction-btns-container button {
+    position: absolute;
+    right: 30px;
+  }
+
   .interaction-btns {
     background-color: rgba(255, 255, 255, 0);
     border: none;
     height: 29px;
+    width: 26px;
+  }
+
+  .interaction-share-btn {
+    background-color: rgba(255, 255, 255, 0);
+    border: none;
+    height: 29px;
+    left: 0;
+    position: absolute;
     width: 26px;
   }
 

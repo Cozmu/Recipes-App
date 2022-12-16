@@ -18,26 +18,23 @@ function InteractionBtns({ idDaReceita, newFav, dataTestid }) {
 
   useEffect(() => {
     const storeFav = JSON.parse(localStorage.getItem('favoriteRecipes'));
-    // console.log('didimout', storeFav?.some((e) => e.id === idDaReceita));
 
     if (storeFav?.some((e) => e.id === idDaReceita)) {
-      // console.log('didimout-preto');
-      setIsFavorite(<RiHeartFill className="filled-heart-icon" />); // coraçao preenchido
+      setIsFavorite(<RiHeartFill className="filled-heart-icon" />);
     } else {
-      // console.log('didimout-branco');
+      console.log('csadd');
       setIsFavorite(<RiHeartLine className="empty-heart-icon" />);
     }
   }, []);
 
   useEffect(() => {
-    // console.log('entrou', favorites?.some((e) => e.id === idDaReceita));
-    // console.log(idDaReceita);
-    //  favorites.some((e) => // console.log(e.id));
     if (favorites?.some((e) => e.id === idDaReceita)) {
-      // console.log('preto');
-      setIsFavorite(<RiHeartFill className="filled-heart-icon" />); // coraçao preenchido
+      setIsFavorite(<RiHeartFill className="filled-heart-icon" />);
     } else {
-      // console.log('branco');
+      if (pathname === '/favorite-recipes'
+       && favorites.length >= 1 && favorites?.some((e) => e.id !== idDaReceita)) {
+        return setIsFavorite(<RiHeartFill className="filled-heart-icon" />);
+      }
       setIsFavorite(<RiHeartLine className="empty-heart-icon" />);
     }
   }, [favorites]);
@@ -50,42 +47,6 @@ function InteractionBtns({ idDaReceita, newFav, dataTestid }) {
       setFavorites([...favorites, newFav]);
     }
   };
-
-  // const favoriteConditional = () => {
-  //   if (pathname === '/favorite-recipes') {
-  //     // console.log(favorites.some((e) => e.id === idDaReceita));
-  //     return (
-  //       <button
-  //         type="button"
-  //         className="interaction-btns"
-  //         onClick={ () => toggleFavorite() }
-  //       >
-  //         <img
-  //           data-testid={ dataTestid }
-  //           className="favorite-icon"
-  //           src={ isFavorite }
-  //           alt="Favorite"
-  //         />
-  //         { favorites.some((e) => e.id === idDaReceita) && isFavorite}
-  //       </button>
-  //     );
-  //   }
-  //   return (
-  //     <button
-  //       type="button"
-  //       className="interaction-btns"
-  //       onClick={ () => toggleFavorite() }
-  //     >
-  //       <img
-  //         data-testid={ dataTestid }
-  //         className="favorite-icon"
-  //         src={ isFavorite }
-  //         alt="Favorite"
-  //       />
-  //       {isFavorite}
-  //     </button>
-  //   );
-  // };
 
   return (
     <section className="interaction-btns-container">
@@ -102,13 +63,12 @@ function InteractionBtns({ idDaReceita, newFav, dataTestid }) {
         />
         {isFavorite}
       </button>
-      {/* {favoriteConditional()} */}
       {pathname !== '/favorite-recipes'
        && (
          <button
            type="button"
            data-testid="share-btn"
-           className="interaction-btns"
+           className="interaction-share-btn"
            onClick={ () => {
              const TIME = 3000;
              setToggleShare(true);

@@ -32,6 +32,13 @@
     height: 120px;
     justify-content: space-between;
     padding: 10px;
+    position: relative;
+  }
+
+  .buttons-container {
+    position: absolute;
+    right: 0;
+    top: 40px;
   }
 
   .instructions-container-in-progress {
