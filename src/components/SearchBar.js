@@ -1,7 +1,9 @@
 import { useEffect, useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
+import { FaSearch } from 'react-icons/fa';
 import RecipesAppContext from '../context/RecipesAppContext';
 import requestRecipesFromAPI from '../services/requestRecipesFromAPI';
+import '../style/SearchBar.css';
 
 function SearchBar() {
   const [category, setCategory] = useState('');
@@ -109,23 +111,14 @@ function SearchBar() {
   }, [category]);
 
   return (
-    <div>
+    <div className="search-bar-container">
       {btnSearch && (
         <>
-          <label htmlFor="searchInput">
-            <input
-              data-testid="search-input"
-              id="searchInput"
-              type="text"
-              name="searchText"
-              onChange={ ({ target }) => setSearchFor(target.value) }
-              value={ searchFor }
-            />
-          </label>
           <label htmlFor="ingredientSearchRadio">
             <input
               name="category"
               data-testid="ingredient-search-radio"
+              className="search-radio"
               id="ingredientSearchRadio"
               type="radio"
               value="Ingredient"
@@ -139,6 +132,7 @@ function SearchBar() {
               name="category"
               type="radio"
               data-testid="name-search-radio"
+              className="search-radio"
               id="nameSearchRadio"
               value="Name"
               onChange={ ({ target }) => setCategory(target.value) }
@@ -150,6 +144,7 @@ function SearchBar() {
             <input
               name="category"
               data-testid="first-letter-search-radio"
+              className="search-radio"
               id="firstLetterSearchRadio"
               type="radio"
               value="First Letter"
@@ -158,15 +153,33 @@ function SearchBar() {
             />
             First Letter
           </label>
-          <button
-            data-testid="exec-search-btn"
-            type="button"
-            disabled={ isDisabled }
-            onClick={ pathname === '/meals' ? sendMeal : sendDrinks }
-            // onClick={ handleClick }
-          >
-            SEARCH
-          </button>
+
+          <section className="search-button-container">
+            <label
+              htmlFor="searchInput"
+            >
+              <input
+                className="search-input"
+                data-testid="search-input"
+                id="searchInput"
+                type="text"
+                name="searchText"
+                placeholder="Tell us your favorite recipe !"
+                onChange={ ({ target }) => setSearchFor(target.value) }
+                value={ searchFor }
+              />
+            </label>
+            <button
+              data-testid="exec-search-btn"
+              className="exec-search-btn"
+              type="button"
+              disabled={ isDisabled }
+              onClick={ pathname === '/meals' ? sendMeal : sendDrinks }
+            >
+              <FaSearch className="exec-search-btn-incon" />
+            </button>
+          </section>
+
         </>
       )}
     </div>

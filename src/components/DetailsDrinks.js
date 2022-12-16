@@ -1,11 +1,12 @@
 import { useEffect, useState, useContext } from 'react';
 import { useParams, NavLink, useHistory } from 'react-router-dom';
+import { IoChevronBackCircleSharp } from 'react-icons/io5';
 import requestRecipesFromAPI from '../services/requestRecipesFromAPI';
 import display from '../helpers/display';
-import '../style/Details.css';
 import RecipesAppContext from '../context/RecipesAppContext';
 import InteractionBtns from './InteractionBtns';
 import handleFilter from '../helpers/handleFilter';
+import '../style/DetailsRecipes.css';
 
 function DetailsDrinks() {
   const [newFav, setNewFav] = useState({});
@@ -71,68 +72,86 @@ function DetailsDrinks() {
 
   return (
     <div>
-      <NavLink
-        to="/drinks"
-      >
-        Voltar
-      </NavLink>
-      <img
-        width="250"
-        data-testid="recipe-photo"
-        src={ recipePhoto }
-        alt={ idDaReceita }
-      />
-      <h3
-        data-testid="recipe-title"
-      >
-        {recipeTitle}
-      </h3>
-      <h4
-        data-testid="recipe-category"
-      >
-        {recipeAlcoholic}
-      </h4>
-      <InteractionBtns
-        newFav={ newFav }
-        idDaReceita={ idDaReceita }
-        dataTestid="favorite-btn"
-      />
-      <ul>
-        {ingredientAndMeasure.map((e, i) => (
-          <li
-            data-testid={ `${i}-ingredient-name-and-measure` }
-            key={ i }
-          >
-            {e}
-          </li>
-        ))}
-      </ul>
-      <p
-        data-testid="instructions"
-      >
-        {instructions}
-
-      </p>
-      <section
-        className="recommendationCard-container"
-      >
-        {display(SIX, recommendations)
-          .map(({ strMeal, strMealThumb, idMeal }, index) => (
-            <NavLink
-              to={ `/meals/${idMeal}` }
-              className="recommendationCard"
-              key={ index }
-              data-testid={ `${index}-recommendation-card` }
-            >
-              <p
-                data-testid={ `${index}-recommendation-title` }
-              >
-                {strMeal}
-              </p>
-              <img src={ strMealThumb } alt={ strMeal } />
-            </NavLink>
-          ))}
+      <section className="recipe-photo-container">
+        <NavLink
+          to="/drinks"
+          className="back-icon"
+        >
+          <IoChevronBackCircleSharp />
+        </NavLink>
+        <img
+          data-testid="recipe-photo"
+          className="recipe-photo"
+          src={ recipePhoto }
+          alt={ idDaReceita }
+        />
       </section>
+      <section className="titles-and-btns-container">
+        <div>
+          <h1
+            data-testid="recipe-title"
+          >
+            {recipeTitle}
+          </h1>
+          <h3
+            data-testid="recipe-category"
+          >
+            {recipeAlcoholic}
+          </h3>
+        </div>
+        <div className="buttons-container">
+          <InteractionBtns
+            newFav={ newFav }
+            idDaReceita={ idDaReceita }
+            dataTestid="favorite-btn"
+          />
+        </div>
+      </section>
+      <section className="ingredients-container">
+        <h1>Ingredients</h1>
+        <ul>
+          {ingredientAndMeasure.map((e, i) => (
+            <li
+              data-testid={ `${i}-ingredient-name-and-measure` }
+              key={ i }
+            >
+              {e}
+            </li>
+          ))}
+        </ul>
+      </section>
+      <section className="instructions-container">
+        <h1>Intructions</h1>
+        <p
+          data-testid="instructions"
+        >
+          {instructions}
+
+        </p>
+      </section>
+      <div className="recommendations">
+        <h2>Recommended</h2>
+        <section
+          className="recommendationCard-container"
+        >
+          {display(SIX, recommendations)
+            .map(({ strMeal, strMealThumb, idMeal }, index) => (
+              <NavLink
+                to={ `/meals/${idMeal}` }
+                className="recommendationCard"
+                key={ index }
+                data-testid={ `${index}-recommendation-card` }
+              >
+                <img src={ strMealThumb } alt={ strMeal } />
+                <p
+                  data-testid={ `${index}-recommendation-title` }
+                >
+                  {strMeal}
+                </p>
+              </NavLink>
+            ))}
+        </section>
+      </div>
       <button
         className="start-recipe-btn"
         data-testid="start-recipe-btn"

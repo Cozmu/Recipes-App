@@ -2,10 +2,12 @@ import PropTypes from 'prop-types';
 import { useEffect, useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import copy from 'clipboard-copy';
+import { RiHeartLine, RiHeartFill } from 'react-icons/ri';
 import RecipesAppContext from '../context/RecipesAppContext';
 import shareIcon from '../images/shareIcon.svg';
-import whiteHeartIcon from '../images/whiteHeartIcon.svg';
-import blackHeartIcon from '../images/blackHeartIcon.svg';
+// import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+// import blackHeartIcon from '../images/blackHeartIcon.svg';
+import '../style/InteractionBtns.css';
 
 function InteractionBtns({ idDaReceita, newFav, dataTestid }) {
   const [toggleShare, setToggleShare] = useState(false);
@@ -16,18 +18,24 @@ function InteractionBtns({ idDaReceita, newFav, dataTestid }) {
 
   useEffect(() => {
     const storeFav = JSON.parse(localStorage.getItem('favoriteRecipes'));
+
     if (storeFav?.some((e) => e.id === idDaReceita)) {
-      setIsFavorite(blackHeartIcon);
+      setIsFavorite(<RiHeartFill className="filled-heart-icon" />);
     } else {
-      setIsFavorite(whiteHeartIcon);
+      console.log('csadd');
+      setIsFavorite(<RiHeartLine className="empty-heart-icon" />);
     }
   }, []);
 
   useEffect(() => {
     if (favorites?.some((e) => e.id === idDaReceita)) {
-      setIsFavorite(blackHeartIcon);
+      setIsFavorite(<RiHeartFill className="filled-heart-icon" />);
     } else {
-      setIsFavorite(whiteHeartIcon);
+      if (pathname === '/favorite-recipes'
+       && favorites.length >= 1 && favorites?.some((e) => e.id !== idDaReceita)) {
+        return setIsFavorite(<RiHeartFill className="filled-heart-icon" />);
+      }
+      setIsFavorite(<RiHeartLine className="empty-heart-icon" />);
     }
   }, [favorites]);
 
@@ -41,22 +49,26 @@ function InteractionBtns({ idDaReceita, newFav, dataTestid }) {
   };
 
   return (
-    <section>
+    <section className="interaction-btns-container">
       <button
         type="button"
+        className="interaction-btns"
         onClick={ () => toggleFavorite() }
       >
         <img
           data-testid={ dataTestid }
+          className="favorite-icon"
           src={ isFavorite }
           alt="Favorite"
         />
+        {isFavorite}
       </button>
       {pathname !== '/favorite-recipes'
        && (
          <button
            type="button"
            data-testid="share-btn"
+           className="interaction-share-btn"
            onClick={ () => {
              const TIME = 3000;
              setToggleShare(true);

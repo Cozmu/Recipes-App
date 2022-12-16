@@ -1,11 +1,12 @@
 import { useEffect, useState, useContext } from 'react';
 import { useParams, NavLink, useHistory } from 'react-router-dom';
+import { IoChevronBackCircleSharp } from 'react-icons/io5';
 import requestRecipesFromAPI from '../services/requestRecipesFromAPI';
 import display from '../helpers/display';
-import '../style/Details.css';
 import RecipesAppContext from '../context/RecipesAppContext';
 import InteractionBtns from './InteractionBtns';
 import handleFilter from '../helpers/handleFilter';
+import '../style/DetailsRecipes.css';
 
 function DetailsMeals() {
   const [newFav, setNewFav] = useState({});
@@ -75,77 +76,98 @@ function DetailsMeals() {
 
   return (
     <div>
-      <NavLink
-        to="/meals"
-      >
-        Voltar
-      </NavLink>
-      <img
-        width="250"
-        data-testid="recipe-photo"
-        src={ recipePhoto }
-        alt={ idDaReceita }
-      />
-      <h3
-        data-testid="recipe-title"
-      >
-        {recipeTitle}
-      </h3>
-      <h4
-        data-testid="recipe-category"
-      >
-        {recipeCategory}
-      </h4>
-      <InteractionBtns
-        newFav={ newFav }
-        idDaReceita={ idDaReceita }
-        dataTestid="favorite-btn"
-      />
-      <ul>
-        {ingredientAndMeasure.map((e, i) => (
-          <li
-            data-testid={ `${i}-ingredient-name-and-measure` }
-            key={ i }
-          >
-            {e}
-          </li>
-        ))}
-      </ul>
-      <p
-        data-testid="instructions"
-      >
-        {instructions}
-
-      </p>
-      <iframe
-        data-testid="video"
-        src={ `${video[0]}embed/${video[1]}` }
-        title={ recipeTitle }
-        frameBorder="0"
-        allow="accelerometer; autoplay;
-              clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen
-      />
-      <section
-        className="recommendationCard-container"
-      >
-        {display(SIX, recommendations)
-          .map(({ strDrink, strDrinkThumb, idDrink }, index) => (
-            <NavLink
-              to={ `/drinks/${idDrink}` }
-              className="recommendationCard"
-              key={ index }
-              data-testid={ `${index}-recommendation-card` }
-            >
-              <p
-                data-testid={ `${index}-recommendation-title` }
-              >
-                {strDrink}
-              </p>
-              <img src={ strDrinkThumb } alt={ strDrink } />
-            </NavLink>
-          ))}
+      <section className="recipe-photo-container">
+        <NavLink
+          to="/meals"
+          className="back-icon"
+        >
+          <IoChevronBackCircleSharp />
+        </NavLink>
+        <img
+          className="recipe-photo"
+          data-testid="recipe-photo"
+          src={ recipePhoto }
+          alt={ idDaReceita }
+        />
       </section>
+      <section className="titles-and-btns-container">
+        <div>
+          <h1
+            data-testid="recipe-title"
+          >
+            {recipeTitle}
+          </h1>
+          <h4
+            data-testid="recipe-category"
+          >
+            {recipeCategory}
+          </h4>
+        </div>
+        <div className="buttons-container">
+          <InteractionBtns
+            newFav={ newFav }
+            idDaReceita={ idDaReceita }
+            dataTestid="favorite-btn"
+          />
+        </div>
+      </section>
+      <section className="ingredients-container">
+        <h1>Ingredients</h1>
+        <ul>
+          {ingredientAndMeasure.map((e, i) => (
+            <li
+              data-testid={ `${i}-ingredient-name-and-measure` }
+              key={ i }
+            >
+              {e}
+            </li>
+          ))}
+        </ul>
+      </section>
+      <section className="instructions-container">
+        <h1>Intructions</h1>
+        <p
+          data-testid="instructions"
+        >
+          {instructions}
+
+        </p>
+      </section>
+      <div className="iframe-container">
+        <iframe
+          className="iframe"
+          data-testid="video"
+          src={ `${video[0]}embed/${video[1]}` }
+          title={ recipeTitle }
+          frameBorder="0"
+          allow="accelerometer; autoplay;
+              clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        />
+      </div>
+      <div className="recommendations">
+        <h2>Recommended</h2>
+        <section
+          className="recommendationCard-container"
+        >
+          {display(SIX, recommendations)
+            .map(({ strDrink, strDrinkThumb, idDrink }, index) => (
+              <NavLink
+                to={ `/drinks/${idDrink}` }
+                className="recommendationCard"
+                key={ index }
+                data-testid={ `${index}-recommendation-card` }
+              >
+                <img src={ strDrinkThumb } alt={ strDrink } />
+                <p
+                  data-testid={ `${index}-recommendation-title` }
+                >
+                  {strDrink}
+                </p>
+              </NavLink>
+            ))}
+        </section>
+      </div>
       <button
         className="start-recipe-btn"
         data-testid="start-recipe-btn"

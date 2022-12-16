@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
-import teste from '../images/picwish.png';
-// import { useHistory } from 'react-router-dom';
+import teste from '../images/DeliSemFundo.png';
+import '../style/Login.css';
 
 function Login({ history }) {
   const [email, setEmail] = useState({ email: '' });
@@ -26,41 +26,53 @@ function Login({ history }) {
   return (
     <div className="loginInitial">
       <img src={ teste } alt="logo" className="logo" />
-      <label htmlFor="emailInput">
-        <input
-          data-testid="email-input"
-          className="inputEmailCss"
-          id="emailInput"
-          type="text"
-          placeholder="E-mail"
-          onChange={ ({ target }) => {
-            setEmail({
-              email: target.value,
-            });
-          } }
-        />
-      </label>
-      <label htmlFor="passwordInput">
-        <input
-          className="inputSenhaCss"
-          data-testid="password-input"
-          id="passwordInput"
-          placeholder="Senha"
-          type="password"
-          onChange={ ({ target }) => {
-            setPassword(target.value);
-          } }
-        />
-      </label>
-      <button
-        type="button"
-        data-testid="login-submit-btn"
-        disabled={ isDisabled }
-        onClick={ handleSubmite }
-        className="btnCss"
+      <div
+        className="title-container"
       >
-        Enter
-      </button>
+        <h1>
+          DELI
+        </h1>
+        <h2>Recipes</h2>
+      </div>
+      <section
+        className="inputs-container"
+      >
+        <label htmlFor="emailInput">
+          <input
+            className="inputs-login"
+            data-testid="email-input"
+            id="emailInput"
+            type="text"
+            placeholder="E-mail"
+            onChange={ ({ target }) => {
+              setEmail({
+                email: target.value,
+              });
+            } }
+          />
+        </label>
+        <label htmlFor="passwordInput">
+          <input
+            className="inputs-login"
+            data-testid="password-input"
+            id="passwordInput"
+            placeholder="Password"
+            type="password"
+            onChange={ ({ target }) => {
+              setPassword(target.value);
+            } }
+          />
+        </label>
+        <button
+          type="button"
+          data-testid="login-submit-btn"
+          disabled={ isDisabled }
+          onClick={ handleSubmite }
+          className="btnCss"
+        >
+          ENTER
+        </button>
+      </section>
     </div>
   );
 }

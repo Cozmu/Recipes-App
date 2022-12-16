@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import RecipesAppContext from '../context/RecipesAppContext';
 import requestRecipesFromAPI from '../services/requestRecipesFromAPI';
 import display from '../helpers/display';
+import '../style/MealsDrinks.css';
 
 function Drinks() {
   const [firstDrinks, setFirstDrinks] = useState([]);
@@ -28,17 +29,19 @@ function Drinks() {
 
   const filters = async (filterParam) => {
     setRecipes([]);
-    if (filterParam === currentFilter && filtersCollection.length > 1) {
+    if (filterParam === currentFilter && filtersCollection.length >= 1) {
       setFiltersCollection([]);
+      setCurrentFilter('');
     } else if (filterParam === 'Cocktail') {
       const resultCocktail = await requestRecipesFromAPI('https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=Cocktail');
       setFiltersCollection(resultCocktail);
+      setCurrentFilter(filterParam);
     } else {
       const endPoint = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${filterParam}`;
       const result = await requestRecipesFromAPI(endPoint);
       setFiltersCollection(result);
+      setCurrentFilter(filterParam);
     }
-    setCurrentFilter(filterParam);
   };
 
   useEffect(() => {
@@ -52,18 +55,19 @@ function Drinks() {
         to={ `/drinks/${idDrink}` }
         key={ index }
         data-testid={ `${index}-recipe-card` }
+        className="recipe-card"
       >
-        <h3
-          data-testid={ `${index}-card-name` }
-        >
-          {strDrink}
-        </h3>
         <img
           data-testid={ `${index}-card-img` }
           src={ strDrinkThumb }
           width="250"
           alt={ strDrink }
         />
+        <h3
+          data-testid={ `${index}-card-name` }
+        >
+          {strDrink}
+        </h3>
       </NavLink>
     )) : display(TWELVE, filtersCollection)
       .map(({ strDrink, strDrinkThumb, idDrink }, index) => (
@@ -71,64 +75,82 @@ function Drinks() {
           to={ `/drinks/${idDrink}` }
           key={ idDrink }
           data-testid={ `${index}-recipe-card` }
+          className="recipe-card"
         >
-          <h3
-            data-testid={ `${index}-card-name` }
-          >
-            {strDrink}
-          </h3>
           <img
             data-testid={ `${index}-card-img` }
             src={ strDrinkThumb }
             alt={ idDrink }
             width="250"
           />
+          <h3
+            data-testid={ `${index}-card-name` }
+          >
+            {strDrink}
+          </h3>
         </NavLink>
       )));
 
+  const selectedButton = (butaoAtual) => {
+    if (butaoAtual === currentFilter) {
+      return 'filter-btn-active filter-btn';
+    }
+    return 'filter-btn';
+  };
+
   return (
     <div>
-      <button
-        onClick={ () => {
-          setRecipes([]);
-          setFiltersCollection([]);
-        } }
-        data-testid="All-category-filter"
-        type="button"
-      >
-        All
-      </button>
-      {display(FIVE, drinksCategorys).map(({ strCategory }) => (
-        <section key={ strCategory }>
-          <button
-            type="button"
-            onClick={ () => filters(strCategory) }
-            data-testid={ `${strCategory}-category-filter` }
-          >
-            {strCategory}
-          </button>
-        </section>
-      ))}
-      {recipes?.length > 1 ? (recipes?.length > 1
+      <div className="filter-container">
+        <button
+          onClick={ () => {
+            setRecipes([]);
+            setFiltersCollection([]);
+            setCurrentFilter('');
+          } }
+          data-testid="All-category-filter"
+          type="button"
+          className={ selectedButton('') }
+        >
+          All
+        </button>
+        {display(FIVE, drinksCategorys).map(({ strCategory }) => (
+          <section key={ strCategory }>
+            <button
+              type="button"
+              className={ selectedButton(strCategory) }
+              onClick={ () => filters(strCategory) }
+              value={ strCategory }
+              data-testid={ `${strCategory}-category-filter` }
+            >
+              {strCategory}
+            </button>
+          </section>
+        ))}
+      </div>
+
+      <section className="recipes-cards-container">
+        {recipes?.length > 1 ? (recipes?.length > 1
       && display(TWELVE, recipes).map(({ strDrink, strDrinkThumb, idDrink }, i) => (
         <NavLink
           to={ `/drinks/${idDrink}` }
           key={ i }
           data-testid={ `${i}-recipe-card` }
+          className="recipe-card"
         >
-          <h3
-            data-testid={ `${i}-card-name` }
-          >
-            {strDrink}
-          </h3>
           <img
             data-testid={ `${i}-card-img` }
             src={ strDrinkThumb }
             width="250"
             alt={ strDrink }
           />
+          <h3
+            data-testid={ `${i}-card-name` }
+          >
+            {strDrink}
+          </h3>
         </NavLink>
       ))) : rendeizacao}
+      </section>
     </div>
   );
 }
