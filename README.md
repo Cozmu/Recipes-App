@@ -32,6 +32,13 @@
 - Execute o comando para instalar dependências: `npm install`.
 - Para incializar execute o comando: `npm start`.
 
+## Também disponível em:
+
+#### Para melhor experiência acesse o site pelo celular ou aperte `F12` em seu teclado e `Ctrl+Shift+M` respectivamente.
+
+### <a href="https://recipes-app-wheat.vercel.app/" ><b>Recipes App</b></a>
+<a href="https://recipes-app-wheat.vercel.app/" ></a>
+
 ## Como contribuir no projeto:
   1. Faça um **fork** do projeto;
   2. Crie uma nova branch com as suas alterações: `git checkout -b my-feature`;
